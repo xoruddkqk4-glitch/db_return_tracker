@@ -96,12 +96,13 @@
                 <input type="hidden" id="inputNum">
 
                 <!-- 2. 체크리스트 항목 (터치 친화적 세그먼트 버튼) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5 space-y-4">
+                <div id="checklistContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5 space-y-4 opacity-50 pointer-events-none select-none transition-all duration-200">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <h3 class="font-bold text-[#313339] text-sm sm:text-base flex items-center gap-1.5">
                             <span class="w-2 h-4 bg-[#027046] rounded-full"></span>
                             <span>2. 구성품 제출 체크리스트 (총 8문항)</span>
                         </h3>
+                        <span id="txtChecklistNotice" class="text-[11px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200">학번 입력 필요</span>
                     </div>
 
                     <!-- Q1 -->
@@ -280,8 +281,8 @@
                 </div>
 
                 <!-- 제출 버튼 (기본 테마 녹색 #027046 사용) -->
-                <button type="submit" id="btnSubmitStudent"
-                    class="w-full bg-[#027046] hover:bg-[#015837] text-white font-extrabold text-base sm:text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
+                <button type="submit" id="btnSubmitStudent" disabled
+                    class="w-full bg-[#027046] text-white font-extrabold text-base sm:text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 opacity-50 cursor-not-allowed pointer-events-none">
                     <span>🚀</span> <span>제출 정보 등록하기</span>
                 </button>
             </form>
@@ -453,14 +454,60 @@
         let currentSummaryFilter = 'all'; // 'all' | 'complete' | 'incomplete'
 
         window.onload = function () {
+            setFormEnabled(false);
             // 초기 학생 명단 & 교사 목록 단일 RPC로 초고속 불러오기
             google.script.run.withSuccessHandler(function (data) {
                 if (data) {
                     globalStudentList = data.students || [];
                     renderTeacherClassButtons(data.teachers || []);
+                    onStudentIdChange();
                 }
             }).getInitialData();
         };
+
+        // 학생 제출 폼 활성화/비활성화 제어
+        function setFormEnabled(enabled) {
+            const radios = document.querySelectorAll('#studentForm input[type="radio"]');
+            radios.forEach(radio => {
+                radio.disabled = !enabled;
+            });
+
+            const checklistBox = document.getElementById('checklistContainer');
+            if (checklistBox) {
+                if (enabled) {
+                    checklistBox.classList.remove('opacity-50', 'pointer-events-none', 'select-none');
+                } else {
+                    checklistBox.classList.add('opacity-50', 'pointer-events-none', 'select-none');
+                }
+            }
+
+            const btnSubmit = document.getElementById('btnSubmitStudent');
+            if (btnSubmit) {
+                btnSubmit.disabled = !enabled;
+                if (enabled) {
+                    btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    btnSubmit.classList.add('hover:bg-[#015837]', 'active:scale-[0.99]');
+                } else {
+                    btnSubmit.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    btnSubmit.classList.remove('hover:bg-[#015837]', 'active:scale-[0.99]');
+                }
+            }
+
+            const notice = document.getElementById('txtChecklistNotice');
+            if (notice) {
+                const nameVal = document.getElementById('inputStudentName').value;
+                if (enabled) {
+                    notice.textContent = '제출 가능';
+                    notice.className = 'text-[11px] font-extrabold text-[#027046] bg-[#027046]/10 px-2.5 py-0.5 rounded-full border border-[#027046]/20';
+                } else if (nameVal === "명단 미등록 학번") {
+                    notice.textContent = '미등록 학번 (제출 불가)';
+                    notice.className = 'text-[11px] font-extrabold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full border border-rose-200';
+                } else {
+                    notice.textContent = '학번 입력 필요';
+                    notice.className = 'text-[11px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200';
+                }
+            }
+        }
 
         function renderTeacherClassButtons(teachers) {
             const grid = document.getElementById('teacherClassBtnGrid');
@@ -556,11 +603,14 @@
                     document.getElementById('inputGrade').value = found.grade;
                     document.getElementById('inputClassNum').value = found.classNum;
                     document.getElementById('inputNum').value = found.num;
+                    setFormEnabled(true);
                 } else {
                     nameInput.value = "명단 미등록 학번";
+                    setFormEnabled(false);
                 }
             } else {
                 nameInput.value = "";
+                setFormEnabled(false);
             }
         }
 
@@ -599,6 +649,7 @@
                     document.getElementById('receiptModal').classList.remove('hidden');
                     document.getElementById('studentForm').reset();
                     document.getElementById('inputStudentName').value = "";
+                    setFormEnabled(false);
                 }
             }).submitStudentData(formData);
         }
