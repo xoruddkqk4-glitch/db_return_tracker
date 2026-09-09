@@ -3,49 +3,84 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>DB Return Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DB Return Tracker - 디벗 양품화 제출 현황</title>
+    <!-- Google Fonts & Tailwind CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen text-gray-800 pb-12">
+<body class="bg-slate-100 min-h-screen text-slate-800 pb-16 antialiased selection:bg-indigo-500 selection:text-white">
 
-    <!-- 상단 네비게이션 -->
-    <header class="bg-indigo-700 text-white shadow-md mb-6">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">📱 DB Return Tracker</h1>
-            <div class="space-x-2">
+    <!-- 상단 고정 모바일 네비게이션 -->
+    <header class="sticky top-0 z-40 bg-indigo-900/95 backdrop-blur-md text-white shadow-lg border-b border-indigo-800/50">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">📱</span>
+                <div>
+                    <h1 class="text-base sm:text-lg font-extrabold tracking-tight font-outfit leading-none text-white">DB Return Tracker</h1>
+                    <p class="text-[10px] sm:text-xs text-indigo-200 mt-0.5">디벗 양품화 제출 현황</p>
+                </div>
+            </div>
+            <!-- 세그먼트 탭 버튼 -->
+            <div class="bg-indigo-950/60 p-1 rounded-xl flex space-x-1 border border-indigo-700/40">
                 <button onclick="switchTab('student')" id="btn-tab-student"
-                    class="px-3 py-1.5 rounded-lg bg-white text-indigo-700 font-semibold text-sm shadow">학생 제출용</button>
+                    class="px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1">
+                    <span>🎓</span> <span>학생용</span>
+                </button>
                 <button onclick="switchTab('teacher')" id="btn-tab-teacher"
-                    class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm">교사
-                    관리용</button>
+                    class="px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1">
+                    <span>👩‍🏫</span> <span>교사용</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4">
+    <main class="max-w-3xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
 
-        <!-- ================= 1. 학생 제출 화면 ================= -->
-        <section id="view-student" class="bg-white rounded-xl shadow-md p-6">
-            <div class="border-b pb-4 mb-6">
-                <h2 class="text-lg font-bold text-gray-900">디벗 양품화 구성품 제출 체크</h2>
-                <p class="text-sm text-gray-500 mt-1">본인의 학번을 확인/선택한 후 제출 항목을 정확히 선택해 주세요.</p>
+        <!-- ================= 1. 학생 제출 화면 (Mobile Optimized) ================= -->
+        <section id="view-student" class="space-y-4">
+
+            <!-- 타이틀 카운터 & 안내 -->
+            <div class="bg-gradient-to-r from-indigo-700 to-purple-700 rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-10 text-8xl font-black font-outfit select-none">CHECK</div>
+                <h2 class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
+                    <span>디벗 양품화 구성품 제출</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-indigo-100 mt-1 leading-relaxed">
+                    본인 학번 5자리를 입력 후 8가지 반납 구성품 제출 여부를 정확히 선택해 주세요.
+                </p>
             </div>
 
-            <form id="studentForm" onsubmit="handleStudentSubmit(event)" class="space-y-6">
+            <form id="studentForm" onsubmit="handleStudentSubmit(event)" class="space-y-4">
 
-                <!-- 학번 입력 및 이름 자동 연동 -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-lg">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">5자리 학번 (예: 10101)</label>
-                        <input type="text" id="inputStudentId" required maxlength="5" pattern="\d{5}"
-                            placeholder="학번 5자리 입력" oninput="onStudentIdChange()"
-                            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 text-lg font-bold text-center">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">학생 이름 (자동 확인)</label>
-                        <input type="text" id="inputStudentName" readonly placeholder="학번을 입력하면 표시됩니다"
-                            class="w-full px-3 py-2 border bg-gray-100 rounded-md font-bold text-lg text-center text-indigo-700">
+                <!-- 학번 입력 카드 (큰 터치 타겟) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5">
+                    <label class="block text-xs font-bold text-indigo-900 uppercase tracking-wider mb-2 flex items-center justify-between">
+                        <span>1. 인적사항 확인</span>
+                        <span class="text-[11px] font-normal text-slate-400">학번 5자리 입력</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <input type="tel" id="inputStudentId" required maxlength="5" pattern="\d{5}" inputmode="numeric"
+                                placeholder="예: 10101" oninput="onStudentIdChange()"
+                                class="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 text-center font-outfit font-extrabold text-xl sm:text-2xl text-slate-800 transition-all outline-none bg-slate-50/50">
+                        </div>
+                        <div>
+                            <input type="text" id="inputStudentName" readonly placeholder="학번 입력 시 자동 표시"
+                                class="w-full px-4 py-3.5 border-2 border-slate-200/60 bg-slate-100 rounded-xl text-center font-bold text-lg text-indigo-700 transition-all">
+                        </div>
                     </div>
                 </div>
 
@@ -54,197 +89,272 @@
                 <input type="hidden" id="inputClassNum">
                 <input type="hidden" id="inputNum">
 
-                <!-- 체크리스트 항목 -->
-                <div class="space-y-4">
-                    <h3 class="font-bold text-gray-800 border-l-4 border-indigo-600 pl-2">제출 항목 체크리스트</h3>
+                <!-- 체크리스트 항목 (터치 친화적 세그먼트 버튼) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-4 bg-indigo-600 rounded-full"></span>
+                            <span>2. 구성품 제출 체크리스트 (총 8문항)</span>
+                        </h3>
+                    </div>
 
                     <!-- Q1 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">1. 디벗 기기를 학급 디벗함 본인의 번호에 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q1" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q1" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            1. 디벗 기기를 학급 디벗함 본인의 번호에 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q1" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q1" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q2 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">2. 가방에 학번&이름 라벨지를 붙인 후, 큰 박스에 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q2" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q2" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            2. 가방에 학번&이름 라벨지를 붙인 후, 큰 박스에 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q2" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q2" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q3 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">3. 충전 어댑터를 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q3" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q3" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            3. 충전 어댑터를 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q3" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q3" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q4 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">4. 충전 케이블을 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q4" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q4" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            4. 충전 케이블을 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q4" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q4" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q5 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">5. 스타일러스 펜을 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q5" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q5" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            5. 스타일러스 펜을 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q5" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q5" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q6 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">6. USB 형태의 펜 홀더를 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q6" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q6" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            6. USB 형태의 펜 홀더를 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q6" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q6" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q7 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">7. '디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q7" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q7" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            7. '디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q7" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q7" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                     <!-- Q8 -->
-                    <div
-                        class="p-3 bg-gray-50 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <span class="text-sm font-medium text-gray-700">8. 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?</span>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="q8" value="제출" required
-                                    class="w-4 h-4 text-indigo-600"> <span class="ml-1 text-sm">제출</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="q8" value="미제출"
-                                    class="w-4 h-4 text-red-600"> <span
-                                    class="ml-1 text-sm text-red-600">미제출</span></label>
+                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                            8. 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q8" value="제출" required class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✓</span> <span>제출</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="q8" value="미제출" class="peer sr-only">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                    <span>✕</span> <span>미제출</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
                 </div>
 
+                <!-- 제출 버튼 -->
                 <button type="submit" id="btnSubmitStudent"
-                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow transition">
-                    제출 정보 등록하기
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-base sm:text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
+                    <span>🚀</span> <span>제출 정보 등록하기</span>
                 </button>
             </form>
         </section>
 
-        <!-- ================= 2. 교사 로그인 / 대시보드 화면 ================= -->
-        <section id="view-teacher" class="hidden space-y-6">
+        <!-- ================= 2. 교사 로그인 / 대시보드 화면 (Mobile Optimized) ================= -->
+        <section id="view-teacher" class="hidden space-y-4">
 
-            <!-- 교사 로그인 폼 -->
-            <div id="teacherLoginBox" class="bg-white rounded-xl shadow-md p-6 max-w-md mx-auto">
-                <h2 class="text-lg font-bold text-gray-900 mb-4 text-center">교사 인증</h2>
-                <div class="space-y-4">
+            <!-- 교사 로그인 폼 카드 -->
+            <div id="teacherLoginBox" class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 max-w-md mx-auto space-y-4">
+                <div class="text-center space-y-1">
+                    <span class="text-3xl">🔐</span>
+                    <h2 class="text-lg font-bold text-slate-900">교사 인증 대시보드</h2>
+                    <p class="text-xs text-slate-500">담당 학급을 선택 후 비밀번호를 입력해 주세요.</p>
+                </div>
+                <div class="space-y-3">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">학급 선택</label>
-                        <select id="selectTeacherClass" class="w-full border rounded-md px-3 py-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">학급 선택</label>
+                        <select id="selectTeacherClass" class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none bg-slate-50">
                             <option value="">학급 선택...</option>
                             <option value="ALL">전체 보기 (담당/관리 교사용)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">비밀번호</label>
                         <input type="password" id="inputTeacherPw" placeholder="비밀번호 입력"
-                            class="w-full border rounded-md px-3 py-2">
+                            class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none bg-slate-50">
                     </div>
                     <button onclick="handleTeacherLogin()"
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg">
-                        대시보드 접속
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-1.5">
+                        <span>🔓</span> <span>대시보드 접속</span>
                     </button>
                 </div>
             </div>
 
             <!-- 교사 대시보드 (로그인 후 표시) -->
-            <div id="teacherDashboard" class="hidden space-y-6">
+            <div id="teacherDashboard" class="hidden space-y-4">
 
-                <!-- 대시보드 헤더 & 컨트롤 -->
-                <div
-                    class="bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <span id="txtTeacherBadge"
-                            class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded">담임교사
-                            모드</span>
-                        <h2 id="txtDashboardTitle" class="text-xl font-bold text-gray-900 mt-1">제출 현황 모니터링</h2>
+                <!-- 대시보드 모바일 바 & 컨트롤 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 space-y-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span id="txtTeacherBadge" class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
+                            <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-slate-900 mt-1">제출 현황 모니터링</h2>
+                        </div>
+                        <button onclick="loadDashboardData()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
+                            <span>🔄</span> <span class="hidden sm:inline">새로고침</span>
+                        </button>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="copyUnsubmittedList()"
-                            class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-3 py-2 rounded-lg shadow">
-                            📋 미제출자 명단 복사
-                        </button>
-                        <button onclick="loadDashboardData()"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold px-3 py-2 rounded-lg">
-                            🔄 새로고침
-                        </button>
+                    
+                    <button onclick="copyUnsubmittedList()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
+                        <span>📋</span> <span>미제출자 명단 1클릭 복사</span>
+                    </button>
+                </div>
+
+                <!-- 요약 카드 (3열) -->
+                <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                    <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-slate-200/80 text-center">
+                        <p class="text-[11px] sm:text-xs text-slate-500 font-bold">전체 학생</p>
+                        <p id="statTotal" class="text-xl sm:text-2xl font-black text-slate-800 font-outfit mt-0.5">0명</p>
+                    </div>
+                    <div class="bg-emerald-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border border-emerald-200/60 text-center">
+                        <p class="text-[11px] sm:text-xs text-emerald-700 font-bold">완료 학생</p>
+                        <p id="statComplete" class="text-xl sm:text-2xl font-black text-emerald-600 font-outfit mt-0.5">0명</p>
+                    </div>
+                    <div class="bg-rose-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border border-rose-200/60 text-center">
+                        <p class="text-[11px] sm:text-xs text-rose-700 font-bold">미완료/미제출</p>
+                        <p id="statIncomplete" class="text-xl sm:text-2xl font-black text-rose-600 font-outfit mt-0.5">0명</p>
                     </div>
                 </div>
 
-                <!-- 요약 카드 -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-white p-4 rounded-xl shadow text-center">
-                        <p class="text-xs text-gray-500 font-semibold">전체 학생</p>
-                        <p id="statTotal" class="text-2xl font-bold text-gray-800">0명</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl shadow text-center">
-                        <p class="text-xs text-gray-500 font-semibold">완료 학생</p>
-                        <p id="statComplete" class="text-2xl font-bold text-green-600">0명</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl shadow text-center">
-                        <p class="text-xs text-gray-500 font-semibold">미완료/미제출</p>
-                        <p id="statIncomplete" class="text-2xl font-bold text-red-600">0명</p>
-                    </div>
+                <!-- 1) 모바일 전용 카드 리스트 View (Mobile Display) -->
+                <div id="cardDashboardList" class="space-y-3 block sm:hidden">
+                    <!-- JS 동적 생성 -->
                 </div>
 
-                <!-- 학생 현황 표 -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) -->
+                <div id="tableDashboardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hidden sm:block">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-600">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <table class="w-full text-xs sm:text-sm text-left text-slate-600">
+                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b">
                                 <tr>
-                                    <th class="px-4 py-3">학번/이름</th>
-                                    <th class="px-2 py-3 text-center">최종</th>
+                                    <th class="px-3 py-3 font-bold">학번/이름</th>
+                                    <th class="px-2 py-3 text-center font-bold">최종</th>
                                     <th class="px-2 py-3 text-center">1.기기</th>
                                     <th class="px-2 py-3 text-center">2.큰박스</th>
                                     <th class="px-2 py-3 text-center">3.어댑터</th>
@@ -256,8 +366,8 @@
                                     <th class="px-2 py-3 text-center">수정</th>
                                 </tr>
                             </thead>
-                            <tbody id="tableDashboardBody" class="divide-y">
-                                <!-- 동적 로딩 -->
+                            <tbody id="tableDashboardBody" class="divide-y divide-slate-100">
+                                <!-- JS 동적 생성 -->
                             </tbody>
                         </table>
                     </div>
@@ -269,22 +379,23 @@
 
     </main>
 
-    <!-- 제출 완료 팝업 (확인증) -->
-    <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
-            <div
-                class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl">
-                ✓</div>
-            <h3 class="text-lg font-bold text-gray-900">제출이 등록되었습니다!</h3>
-            <div class="bg-gray-50 p-3 rounded-lg text-left text-sm space-y-1">
-                <p><span class="font-semibold text-gray-600">학번:</span> <span id="modalStudentId"
-                        class="font-bold"></span></p>
-                <p><span class="font-semibold text-gray-600">이름:</span> <span id="modalStudentName"
-                        class="font-bold"></span></p>
+    <!-- 제출 완료 팝업 (확인증 Modal) -->
+    <div id="receiptModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-xs sm:max-w-sm w-full text-center space-y-4 shadow-2xl border border-slate-100 transform transition-all animate-in fade-in zoom-in duration-200">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                ✓
             </div>
-            <p class="text-xs text-gray-500">제출 현황이 제출 되었습니다. 다시 입력하면 마지막 제출 현황이 기록됩니다.</p>
+            <div class="space-y-1">
+                <h3 class="text-lg font-bold text-slate-900">제출이 등록되었습니다!</h3>
+                <p id="modalTimestamp" class="text-[11px] text-slate-400 font-outfit"></p>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-2xl text-left text-xs sm:text-sm space-y-1.5 border border-slate-100">
+                <p class="flex justify-between"><span class="font-semibold text-slate-500">학번:</span> <span id="modalStudentId" class="font-extrabold text-slate-900 font-outfit"></span></p>
+                <p class="flex justify-between"><span class="font-semibold text-slate-500">이름:</span> <span id="modalStudentName" class="font-bold text-indigo-700"></span></p>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed px-1">제출 현황이 제출 되었습니다. 다시 입력하면 마지막 제출 현황이 기록됩니다.</p>
             <button onclick="closeModal()"
-                class="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold">확인</button>
+                class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-sm shadow-md transition-all">확인</button>
         </div>
     </div>
 
@@ -296,12 +407,12 @@
         window.onload = function () {
             // 초기 학생 명단 & 교사 목록 불러오기
             google.script.run.withSuccessHandler(function (list) {
-                globalStudentList = list;
+                globalStudentList = list || [];
             }).getStudentList();
 
             google.script.run.withSuccessHandler(function (teachers) {
                 const select = document.getElementById('selectTeacherClass');
-                teachers.forEach(t => {
+                (teachers || []).forEach(t => {
                     const opt = document.createElement('option');
                     opt.value = t.className;
                     opt.textContent = `${t.className} (${t.name} 선생님)`;
@@ -320,13 +431,13 @@
             if (tab === 'student') {
                 vStudent.classList.remove('hidden');
                 vTeacher.classList.add('hidden');
-                btnStudent.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-700 font-semibold text-sm shadow";
-                btnTeacher.className = "px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm";
+                btnStudent.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
+                btnTeacher.className = "px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
             } else {
                 vStudent.classList.add('hidden');
                 vTeacher.classList.remove('hidden');
-                btnTeacher.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-700 font-semibold text-sm shadow";
-                btnStudent.className = "px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm";
+                btnTeacher.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
+                btnStudent.className = "px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
             }
         }
 
@@ -343,7 +454,7 @@
                     document.getElementById('inputClassNum').value = found.classNum;
                     document.getElementById('inputNum').value = found.num;
                 } else {
-                    nameInput.value = "명단에 없는 학번입니다";
+                    nameInput.value = "명단 미등록 학번";
                 }
             } else {
                 nameInput.value = "";
@@ -355,7 +466,7 @@
             e.preventDefault();
             const btn = document.getElementById('btnSubmitStudent');
             btn.disabled = true;
-            btn.textContent = "등록 중...";
+            btn.innerHTML = `<span>⏳</span> <span>등록 처리 중...</span>`;
 
             const formData = {
                 studentId: document.getElementById('inputStudentId').value,
@@ -375,10 +486,13 @@
 
             google.script.run.withSuccessHandler(function (res) {
                 btn.disabled = false;
-                btn.textContent = "제출 정보 등록하기";
-                if (res.success) {
+                btn.innerHTML = `<span>🚀</span> <span>제출 정보 등록하기</span>`;
+                if (res && res.success) {
                     document.getElementById('modalStudentId').textContent = res.studentId;
                     document.getElementById('modalStudentName').textContent = res.name;
+                    if (res.timestamp) {
+                        document.getElementById('modalTimestamp').textContent = `제출일시: ${res.timestamp}`;
+                    }
                     document.getElementById('receiptModal').classList.remove('hidden');
                     document.getElementById('studentForm').reset();
                     document.getElementById('inputStudentName').value = "";
@@ -402,7 +516,6 @@
 
             if (!className) { alert('학급을 선택해주세요.'); return; }
 
-            // 전체 보기는 비번 검증 스킵 또는 지정 비번 가능
             if (className === 'ALL') {
                 currentTeacherClass = 'ALL';
                 showDashboard('전체 학급 (담당 교사)');
@@ -410,11 +523,11 @@
             }
 
             google.script.run.withSuccessHandler(function (res) {
-                if (res.success) {
+                if (res && res.success) {
                     currentTeacherClass = className;
                     showDashboard(`${className} (${res.teacherName} 선생님)`);
                 } else {
-                    alert(res.message);
+                    alert((res && res.message) || '비밀번호가 일치하지 않습니다.');
                 }
             }).verifyTeacherLogin(className, pw);
         }
@@ -430,49 +543,96 @@
             google.script.run.withSuccessHandler(renderDashboard).getTeacherDashboardData(currentTeacherClass);
         }
 
+        // 모바일 카드 & 데스크탑 테이블 통합 렌더링
         function renderDashboard(data) {
-            currentDashboardData = data;
+            currentDashboardData = data || [];
             const tbody = document.getElementById('tableDashboardBody');
+            const mobileCardList = document.getElementById('cardDashboardList');
             tbody.innerHTML = '';
+            mobileCardList.innerHTML = '';
 
             let completeCount = 0;
 
-            data.forEach(item => {
+            const qLabels = ['1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.점검표', '8.작은박스'];
+
+            currentDashboardData.forEach(item => {
                 if (item.isComplete) completeCount++;
 
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50 border-b text-center";
-
-                const badgeClass = item.isComplete ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                const badgeClass = item.isComplete ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200';
                 const statusText = item.isComplete ? '완료' : '미완료';
 
+                // 1. 데스크탑 테이블 행
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100 text-center";
                 tr.innerHTML = `
-          <td class="px-4 py-3 font-semibold text-left text-gray-800">${item.studentId} ${item.name}</td>
-          <td class="px-2 py-3"><span class="px-2 py-1 rounded text-xs font-bold ${badgeClass}">${statusText}</span></td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q1)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q2)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q3)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q4)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q5)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q6)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q7)}</td>
-          <td class="px-2 py-3">${renderStatusCell(item.status.q8)}</td>
-          <td class="px-2 py-3">
-            <button onclick="openEditStudent('${item.studentId}')" class="text-xs text-indigo-600 hover:underline">수정</button>
-          </td>
-        `;
+                    <td class="px-3 py-3 font-semibold text-left text-slate-800">${item.studentId} ${item.name}</td>
+                    <td class="px-2 py-3"><span class="px-2 py-0.5 rounded-md text-[11px] font-bold border ${badgeClass}">${statusText}</span></td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q1)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q2)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q3)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q4)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q5)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q6)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q7)}</td>
+                    <td class="px-2 py-3">${renderStatusCell(item.status.q8)}</td>
+                    <td class="px-2 py-3">
+                        <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 hover:underline px-2 py-1 bg-indigo-50 rounded-md">수정</button>
+                    </td>
+                `;
                 tbody.appendChild(tr);
+
+                // 2. 모바일 전용 카드
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-3";
+                
+                const qStatusList = [
+                    item.status.q1, item.status.q2, item.status.q3, item.status.q4,
+                    item.status.q5, item.status.q6, item.status.q7, item.status.q8
+                ];
+
+                let chipsHtml = '';
+                qLabels.forEach((label, idx) => {
+                    const isSubmitted = qStatusList[idx] === '제출';
+                    const chipStyle = isSubmitted 
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                        : 'bg-rose-50 text-rose-700 border-rose-200 font-bold';
+                    const icon = isSubmitted ? '✓' : '✕';
+                    chipsHtml += `
+                        <div class="px-2 py-1 rounded-lg text-[11px] border ${chipStyle} flex items-center justify-between">
+                            <span>${label}</span>
+                            <span class="font-extrabold ml-1">${icon}</span>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
+                        <div>
+                            <span class="font-extrabold text-slate-900 text-sm font-outfit">${item.studentId}</span>
+                            <span class="font-bold text-slate-800 text-sm ml-1">${item.name}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold border ${badgeClass}">${statusText}</span>
+                            <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">수정</button>
+                        </div>
+                    </div>
+                    ${item.status.timestamp ? `<p class="text-[10px] text-slate-400 font-outfit">최종 답변시각: ${item.status.timestamp}</p>` : ''}
+                    <div class="grid grid-cols-2 gap-1.5 pt-1">
+                        ${chipsHtml}
+                    </div>
+                `;
+                mobileCardList.appendChild(card);
             });
 
-            document.getElementById('statTotal').textContent = `${data.length}명`;
+            document.getElementById('statTotal').textContent = `${currentDashboardData.length}명`;
             document.getElementById('statComplete').textContent = `${completeCount}명`;
-            document.getElementById('statIncomplete').textContent = `${data.length - completeCount}명`;
+            document.getElementById('statIncomplete').textContent = `${currentDashboardData.length - completeCount}명`;
         }
 
         function renderStatusCell(val) {
             return val === '제출'
-                ? `<span class="text-green-600 font-bold">O</span>`
-                : `<span class="text-red-400">X</span>`;
+                ? `<span class="text-emerald-600 font-extrabold">O</span>`
+                : `<span class="text-rose-500 font-bold">X</span>`;
         }
 
         // 미제출자 명단 1클릭 복사
@@ -489,7 +649,9 @@
             });
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('미제출자 명단이 클립보드에 복사되었습니다. 메신저 등에 붙여넣어 사용하세요.');
+                alert('미제출자 명단이 클립보드에 복사되었습니다. 학급 안내 메시지 등에 붙여넣어 활용하세요.');
+            }).catch(() => {
+                alert('명단 복사에 실패했습니다. 수동으로 복사해 주세요.\n\n' + text);
             });
         }
 
