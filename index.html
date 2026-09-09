@@ -325,14 +325,9 @@
                             <span id="txtTeacherBadge" class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
                             <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-slate-900 mt-1">제출 현황 모니터링</h2>
                         </div>
-                        <div class="flex items-center space-x-1.5">
-                            <button onclick="logoutTeacher()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
-                                <span>🚪</span> <span>학급 선택</span>
-                            </button>
-                            <button onclick="loadDashboardData()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1 transition-all">
-                                <span>🔄</span> <span class="hidden sm:inline">새로고침</span>
-                            </button>
-                        </div>
+                        <button onclick="logoutTeacher()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
+                            <span>🔙</span> <span>이전 화면으로 돌아가기</span>
+                        </button>
                     </div>
                     
                     <button onclick="copyUnsubmittedList()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
