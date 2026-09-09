@@ -320,7 +320,7 @@
 
                 <!-- 대시보드 모바일 바 & 컨트롤 -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 space-y-3">
-                    <div class="flex justify-between items-start">
+                    <div class="flex justify-between items-center">
                         <div>
                             <span id="txtTeacherBadge" class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
                             <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-slate-900 mt-1">제출 현황 모니터링</h2>
@@ -351,51 +351,65 @@
                     </div>
                 </div>
 
+                <!-- [신규] 구성품별 제출 인원 현황 카운터 패널 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-3.5 space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+                            <span>구성품별 제출 인원 현황</span>
+                        </span>
+                        <span class="text-[11px] font-semibold text-slate-400">항목별 제출 완료 수</span>
+                    </div>
+                    <div id="itemCountsContainer" class="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
+                        <!-- JS 동적 생성 -->
+                    </div>
+                </div>
+
                 <!-- 1) 모바일 전용 카드 리스트 View (Mobile Display) -->
                 <div id="cardDashboardList" class="space-y-3 block sm:hidden">
                     <!-- JS 동적 생성 -->
                 </div>
 
-                <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) - 헤더 클릭 시 오름차순/내림차순 정렬 -->
+                <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) - 한 줄 표시 & 헤더 클릭 정렬 -->
                 <div id="tableDashboardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hidden sm:block">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-xs sm:text-sm text-left text-slate-600">
-                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b select-none">
+                        <table class="w-full text-xs sm:text-sm text-left text-slate-600 whitespace-nowrap">
+                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b select-none whitespace-nowrap">
                                 <tr>
-                                    <th onclick="handleSort('studentId')" class="px-3 py-3 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('studentId')" class="px-2.5 py-3 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         학번/이름 <span id="sort-studentId">↕</span>
                                     </th>
-                                    <th onclick="handleSort('isComplete')" class="px-2 py-3 text-center font-bold cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('isComplete')" class="px-1.5 py-3 text-center font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         최종 <span id="sort-isComplete">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q1')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q1')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         1.기기 <span id="sort-q1">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q2')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q2')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         2.큰박스 <span id="sort-q2">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q3')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q3')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         3.어댑터 <span id="sort-q3">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q4')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q4')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         4.케이블 <span id="sort-q4">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q5')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q5')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         5.펜 <span id="sort-q5">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q6')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q6')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         6.홀더 <span id="sort-q6">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q7')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q7')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         7.작은박스 <span id="sort-q7">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q8')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                    <th onclick="handleSort('q8')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         8.점검표 <span id="sort-q8">↕</span>
                                     </th>
-                                    <th class="px-2 py-3 text-center">수정</th>
+                                    <th class="px-2 py-3 text-center whitespace-nowrap">수정</th>
                                 </tr>
                             </thead>
-                            <tbody id="tableDashboardBody" class="divide-y divide-slate-100">
+                            <tbody id="tableDashboardBody" class="divide-y divide-slate-100 whitespace-nowrap">
                                 <!-- JS 동적 생성 -->
                             </tbody>
                         </table>
@@ -447,9 +461,7 @@
                 (teachers || []).forEach(t => {
                     const opt = document.createElement('option');
                     opt.value = t.className;
-                    opt.textContent = (t.className === '0' || t.className === '관리자')
-                        ? `${t.className} (${t.name} 선생님)` 
-                        : `${t.className} (${t.name} 선생님)`;
+                    opt.textContent = `${t.className} (${t.name} 선생님)`;
                     select.appendChild(opt);
                 });
             }).getTeacherList();
@@ -643,6 +655,36 @@
             renderDashboard(currentDashboardData);
         }
 
+        // 구성품별 제출 카운터 업데이트
+        function updateItemCounts(data) {
+            const container = document.getElementById('itemCountsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const qKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
+            const qLabels = ['1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.점검표'];
+            const counts = { q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0, q7: 0, q8: 0 };
+
+            data.forEach(item => {
+                qKeys.forEach(k => {
+                    if (item.status && item.status[k] === '제출') {
+                        counts[k]++;
+                    }
+                });
+            });
+
+            qKeys.forEach((k, idx) => {
+                const cnt = counts[k];
+                const chip = document.createElement('div');
+                chip.className = "bg-slate-50 border border-slate-200/80 rounded-xl p-2 flex flex-col items-center justify-center shadow-2xs";
+                chip.innerHTML = `
+                    <span class="text-[10px] sm:text-[11px] font-bold text-slate-600 leading-tight whitespace-nowrap">${qLabels[idx]}</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-indigo-700 font-outfit mt-0.5">${cnt}<span class="text-[10px] font-bold text-slate-500 ml-0.5">명</span></span>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
         // 모바일 카드 & 데스크탑 테이블 통합 렌더링
         function renderDashboard(data) {
             const displayData = data || [];
@@ -661,22 +703,22 @@
                 const badgeClass = item.isComplete ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200';
                 const statusText = item.isComplete ? '완료' : '미완료';
 
-                // 1. 데스크탑 테이블 행
+                // 1. 데스크탑 테이블 행 (한 줄 표시: whitespace-nowrap & compact px-1.5)
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 border-b border-slate-100 text-center";
+                tr.className = "hover:bg-slate-50 border-b border-slate-100 text-center whitespace-nowrap";
                 tr.innerHTML = `
-                    <td class="px-3 py-3 font-semibold text-left text-slate-800">${item.studentId} ${item.name}</td>
-                    <td class="px-2 py-3"><span class="px-2 py-0.5 rounded-md text-[11px] font-bold border ${badgeClass}">${statusText}</span></td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q1)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q2)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q3)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q4)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q5)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q6)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q7)}</td>
-                    <td class="px-2 py-3">${renderStatusCell(item.status.q8)}</td>
-                    <td class="px-2 py-3">
-                        <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 hover:underline px-2 py-1 bg-indigo-50 rounded-md">수정</button>
+                    <td class="px-3 py-2.5 font-semibold text-left text-slate-800 whitespace-nowrap">${item.studentId} ${item.name}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap"><span class="inline-block px-1.5 py-0.5 rounded-md text-[11px] font-bold border whitespace-nowrap ${badgeClass}">${statusText}</span></td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q1)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q2)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q3)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q4)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q5)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q6)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q7)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q8)}</td>
+                    <td class="px-1.5 py-2.5 whitespace-nowrap">
+                        <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 hover:underline px-2 py-1 bg-indigo-50 rounded-md whitespace-nowrap">수정</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -727,6 +769,9 @@
             document.getElementById('statTotal').textContent = `${displayData.length}명`;
             document.getElementById('statComplete').textContent = `${completeCount}명`;
             document.getElementById('statIncomplete').textContent = `${displayData.length - completeCount}명`;
+
+            // 구성품별 제출 인원 현황 패널 업데이트
+            updateItemCounts(displayData);
         }
 
         function renderStatusCell(val) {
