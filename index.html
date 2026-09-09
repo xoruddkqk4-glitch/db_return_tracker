@@ -299,7 +299,7 @@
                 <div class="space-y-4">
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700">학급 선택 (2x5 배열)</label>
+                            <label class="text-xs font-bold text-slate-700">학급 선택</label>
                             <span id="txtSelectedClassNotice" class="text-[11px] text-indigo-600 font-semibold">학급 버튼을 선택하세요</span>
                         </div>
                         <input type="hidden" id="selectTeacherClass" value="">
@@ -463,14 +463,22 @@
                 btn.type = 'button';
                 btn.dataset.value = t.className;
 
-                let label = t.className;
-                if (t.className === '0' || t.className === '관리자' || t.className === '업무담당자') {
-                    label = '업무담당자';
-                }
+                const strVal = String(t.className || '').trim();
+                const isAdmin = (
+                    strVal === '0' ||
+                    strVal === '관리자' ||
+                    strVal === '업무담당자' ||
+                    strVal.startsWith('0') ||
+                    strVal.includes('관리자') ||
+                    strVal.includes('업무담당자')
+                );
+                let label = isAdmin ? '업무담당자' : strVal;
                 btn.textContent = label;
 
                 const isLong = label.length >= 4;
-                const fontClass = isLong ? 'text-[10px] sm:text-xs px-0.5 whitespace-nowrap' : 'text-xs sm:text-sm px-1 sm:px-2';
+                const fontClass = isLong
+                    ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
+                    : 'text-xs sm:text-sm px-1 sm:px-2';
                 btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center shadow-sm active:scale-95`;
 
                 btn.onclick = function () { selectTeacherClassBtn(t.className, btn); };
@@ -484,16 +492,25 @@
             const buttons = document.querySelectorAll('.class-select-btn');
             buttons.forEach(btn => {
                 const isLong = btn.textContent.length >= 4;
-                const fontClass = isLong ? 'text-[10px] sm:text-xs px-0.5 whitespace-nowrap' : 'text-xs sm:text-sm px-1 sm:px-2';
+                const fontClass = isLong
+                    ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
+                    : 'text-xs sm:text-sm px-1 sm:px-2';
                 btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center shadow-sm active:scale-95`;
             });
             const isSelLong = selectedBtn.textContent.length >= 4;
-            const fontSelClass = isSelLong ? 'text-[10px] sm:text-xs px-0.5 whitespace-nowrap' : 'text-xs sm:text-sm px-1 sm:px-2';
+            const fontSelClass = isSelLong
+                ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
+                : 'text-xs sm:text-sm px-1 sm:px-2';
             selectedBtn.className = `class-select-btn py-2.5 ${fontSelClass} font-black rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white shadow-md transition-all text-center scale-[1.02] ring-2 ring-indigo-200`;
 
             const notice = document.getElementById('txtSelectedClassNotice');
             if (notice) {
-                const labelStr = (val === '0' || val === '관리자' || val === '업무담당자') ? '업무담당자' : val;
+                const valStr = String(val || '').trim();
+                const isAdmin = (
+                    valStr === '0' || valStr === '관리자' || valStr === '업무담당자' ||
+                    valStr.startsWith('0') || valStr.includes('관리자') || valStr.includes('업무담당자')
+                );
+                const labelStr = isAdmin ? '업무담당자' : valStr;
                 notice.textContent = `선택: ${labelStr}`;
                 notice.className = 'text-[11px] text-indigo-700 font-extrabold bg-indigo-100 px-2 py-0.5 rounded-full';
             }
