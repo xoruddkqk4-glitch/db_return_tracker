@@ -362,40 +362,40 @@
                 <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) - 한 줄 표시 & 헤더 클릭 정렬 -->
                 <div id="tableDashboardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hidden sm:block">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-xs sm:text-sm text-left text-slate-600 whitespace-nowrap">
-                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b select-none whitespace-nowrap">
+                        <table class="w-full text-xs text-left text-slate-600 whitespace-nowrap">
+                            <thead class="text-[10px] sm:text-[11px] text-slate-700 uppercase bg-slate-100/90 border-b select-none whitespace-nowrap">
                                 <tr>
-                                    <th onclick="handleSort('studentId')" class="px-2.5 py-3 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('studentId')" class="px-1.5 py-2 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         학번/이름 <span id="sort-studentId">↕</span>
                                     </th>
-                                    <th onclick="handleSort('isComplete')" class="px-1.5 py-3 text-center font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('isComplete')" class="px-1 py-2 text-center font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         최종 <span id="sort-isComplete">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q1')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q1')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         1.기기 <span id="sort-q1">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q2')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q2')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         2.큰박스 <span id="sort-q2">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q3')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q3')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         3.어댑터 <span id="sort-q3">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q4')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q4')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         4.케이블 <span id="sort-q4">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q5')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q5')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         5.펜 <span id="sort-q5">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q6')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q6')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         6.홀더 <span id="sort-q6">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q7')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q7')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         7.작은박스 <span id="sort-q7">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q8')" class="px-1.5 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                    <th onclick="handleSort('q8')" class="px-0.5 sm:px-1 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         8.점검표 <span id="sort-q8">↕</span>
                                     </th>
-                                    <th class="px-2 py-3 text-center whitespace-nowrap">수정</th>
+                                    <th class="px-1 py-2 text-center whitespace-nowrap">수정</th>
                                 </tr>
                             </thead>
                             <tbody id="tableDashboardBody" class="divide-y divide-slate-100 whitespace-nowrap">
@@ -706,22 +706,22 @@
                 const badgeClass = item.isComplete ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200';
                 const statusText = item.isComplete ? '완료' : '미완료';
 
-                // 1. 데스크탑 테이블 행 (한 줄 표시: whitespace-nowrap & compact px-1.5)
+                // 1. 데스크탑 테이블 행 (한 줄 표시: whitespace-nowrap & compact px-0.5~px-1.5)
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 border-b border-slate-100 text-center whitespace-nowrap";
                 tr.innerHTML = `
-                    <td class="px-3 py-2.5 font-semibold text-left text-slate-800 whitespace-nowrap">${item.studentId} ${item.name}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap"><span class="inline-block px-1.5 py-0.5 rounded-md text-[11px] font-bold border whitespace-nowrap ${badgeClass}">${statusText}</span></td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q1)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q2)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q3)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q4)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q5)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q6)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q7)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">${renderStatusCell(item.status.q8)}</td>
-                    <td class="px-1.5 py-2.5 whitespace-nowrap">
-                        <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 hover:underline px-2 py-1 bg-indigo-50 rounded-md whitespace-nowrap">수정</button>
+                    <td class="px-1.5 py-2 font-semibold text-left text-slate-800 text-[11px] sm:text-xs whitespace-nowrap">${item.studentId} ${item.name}</td>
+                    <td class="px-1 py-2 whitespace-nowrap"><span class="inline-block px-1.5 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold border whitespace-nowrap ${badgeClass}">${statusText}</span></td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q1)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q2)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q3)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q4)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q5)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q6)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q7)}</td>
+                    <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q8)}</td>
+                    <td class="px-1 py-2 whitespace-nowrap">
+                        <button onclick="openEditStudent('${item.studentId}')" class="text-[11px] font-bold text-indigo-600 hover:underline px-1.5 py-0.5 bg-indigo-50 rounded whitespace-nowrap">수정</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
