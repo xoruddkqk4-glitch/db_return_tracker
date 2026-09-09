@@ -156,12 +156,14 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
 - **수정 내용**: 구글 시트 '제출현황' 기록 방식 변경 - '미제출' 시 기존 빈 값+빨간색 셀 배경 기록 방식에서 **숫자 `0` 기록 및 배경색 없음(`#ffffff`)**으로 변경 ([Code.gs](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/Code.gs))
 - **검증 결과**: 미제출 항목 입력 시 0 기록 및 배경색 제거 적용, 교사 대시보드 미제출 데이터 처리 호환 검증 완료
 
-
-
-
-
-
-
 ## [2026-09-09] 업데이트 이력 (Commit ID: 33ad3fc)
 - **수정 내용**: 에이전트 실행 규칙(.agents/rules/rules.md) 및 README 자동 문서화·Git 커밋/푸시 스킬(.agents/skills/git-commit/SKILL.md) 동기화 및 프로젝트 적용
 - **검증 결과**: 에이전트 실행 규칙 수립, README 누적 업데이트 이력 동기화 및 Git repository 커밋/푸시 검증 완료
+
+## [2026-09-09 15:46] 업데이트 이력 (Commit ID: a09d916)
+- **수정 내용**: 모바일 QR 코드 진입 시 모바일 브라우저(Safari, Chrome) 및 Google Apps Script Web App `iframe` 특성으로 인한 상단 헤더 잘림 및 하단 넓은 여백 문제 2차 보정 최적화 ([index.html](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/index.html))
+  1. `<header>` 포지션 변경 (`sticky top-0` ➔ `relative`): Mobile Chrome에서 `iframe` 내부 `sticky top-0` 오프셋을 음수로 오계산하는 버그를 해결하여 상단 헤더가 주소창 밑으로 가려지지 않고 깔끔하게 밀착 표시되도록 최적화
+  2. `overflow-x: hidden` 및 `100dvh` 높이 구속 제거: Chrome 렌더링 엔진과의 스크롤 컨테이너 충돌 방지 및 `body` 높이를 `min-h-full pb-6`으로 조정하여 하단 넓은 흰색 여백(Gap) 완전 제거
+  3. `viewport-fit=cover` 및 Safe Area 패딩 연동: 모바일 노치 및 하단 홈 바 영역 완벽 호환
+- **검증 결과**: 모바일 크롬 및 Safari 웹뷰 샌드박스 표준 호환 레이아웃 검증 및 구문 구조 확인 완료
+

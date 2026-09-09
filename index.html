@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DB Return Tracker - 디벗 양품화 제출 현황</title>
     <!-- Google Fonts & Tailwind CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,21 +11,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        html, body {
+            width: 100%;
+        }
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-tap-highlight-color: transparent;
             color: #313339;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
         .font-outfit {
             font-family: 'Outfit', sans-serif;
         }
+        header {
+            padding-top: max(0.5rem, env(safe-area-inset-top));
+        }
     </style>
 </head>
 
-<body class="bg-slate-100 min-h-screen text-[#313339] pb-16 antialiased selection:bg-[#027046] selection:text-white">
+<body class="bg-slate-100 min-h-full text-[#313339] pb-6 sm:pb-8 antialiased selection:bg-[#027046] selection:text-white">
 
-    <!-- 상단 고정 모바일 네비게이션 (서브 테마색: 파란색 #05014A) -->
-    <header class="sticky top-0 z-40 bg-[#05014A] backdrop-blur-md text-white shadow-lg border-b border-[#05014A]">
+    <!-- 상단 모바일 네비게이션 (서브 테마색: 파란색 #05014A) -->
+    <header class="relative z-40 bg-[#05014A] text-white shadow-lg border-b border-[#05014A]">
         <div class="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <span class="text-2xl">📱</span>
@@ -453,7 +461,17 @@
         let currentSortDir = 'asc';
         let currentSummaryFilter = 'all'; // 'all' | 'complete' | 'incomplete'
 
+        function setVhProperty() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVhProperty();
+        window.addEventListener('resize', setVhProperty);
+        window.addEventListener('orientationchange', setVhProperty);
+
         window.onload = function () {
+            setVhProperty();
+            window.scrollTo(0, 0);
             setFormEnabled(false);
             // 초기 학생 명단 & 교사 목록 단일 RPC로 초고속 불러오기
             google.script.run.withSuccessHandler(function (data) {
