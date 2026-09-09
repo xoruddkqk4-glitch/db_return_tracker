@@ -27,7 +27,7 @@ function getInitialData() {
 // 1. 학생 명단 전체 불러오기 (CacheService 캐싱으로 고속화)
 function getStudentList() {
   const cache = CacheService.getScriptCache();
-  const cached = cache.get('STUDENT_LIST_CACHE');
+  const cached = cache.get('STUDENT_LIST_CACHE_V3');
   if (cached) {
     try { return JSON.parse(cached); } catch (e) {}
   }
@@ -39,16 +39,16 @@ function getStudentList() {
   const data = sheet.getDataRange().getValues();
   if (data.length <= 1) return [];
 
-  const list = data.slice(1).filter(r => r[4]).map(row => ({
-    grade: String(row[1]),
-    classNum: String(row[2]),
-    num: String(row[3]),
-    studentId: String(row[4]),
-    name: String(row[5])
+  const list = data.slice(1).filter(r => r[4] || r[5]).map(row => ({
+    grade: String(row[1] !== undefined ? row[1] : ''),
+    classNum: String(row[2] !== undefined ? row[2] : ''),
+    num: String(row[3] !== undefined ? row[3] : ''),
+    studentId: String(row[4] !== undefined ? row[4] : ''),
+    name: String(row[5] !== undefined ? row[5] : '')
   }));
 
   try {
-    cache.put('STUDENT_LIST_CACHE', JSON.stringify(list), 1200); // 20분 캐싱
+    cache.put('STUDENT_LIST_CACHE_V3', JSON.stringify(list), 600); // 10분 캐싱
   } catch (e) {}
 
   return list;
@@ -122,7 +122,7 @@ function submitStudentData(formData) {
 // 3. 교사 로그인 및 담임교사 목록 불러오기 (CacheService 캐싱)
 function getTeacherList() {
   const cache = CacheService.getScriptCache();
-  const cached = cache.get('TEACHER_LIST_CACHE');
+  const cached = cache.get('TEACHER_LIST_CACHE_V3');
   if (cached) {
     try { return JSON.parse(cached); } catch (e) {}
   }
@@ -139,7 +139,7 @@ function getTeacherList() {
   }));
 
   try {
-    cache.put('TEACHER_LIST_CACHE', JSON.stringify(list), 1200); // 20분 캐싱
+    cache.put('TEACHER_LIST_CACHE_V3', JSON.stringify(list), 600); // 10분 캐싱
   } catch (e) {}
 
   return list;
@@ -153,16 +153,19 @@ function verifyTeacherLogin(className, password) {
 
   const targetClass = String(className).trim();
   const inputPw = String(password).trim();
-  const isAdminTarget = (targetClass === '0' || targetClass === 'ALL' || targetClass === '관리자' || targetClass === '업무담당자');
+  const isAdminTarget = (targetClass === '0' || targetClass === 'ALL' || targetClass === '관리자' || targetClass === '업무담당자' || targetClass === '전체');
 
   for (let i = 1; i < data.length; i++) {
     const curClass = String(data[i][0]).trim();
     const curName = String(data[i][1]).trim();
     const curPw = String(data[i][2]).trim();
 
+    const curClassDigits = curClass.replace(/[^0-9]/g, '');
+    const targetClassDigits = targetClass.replace(/[^0-9]/g, '');
+
     const isMatch = isAdminTarget
       ? (curClass === '0' || curClass === '관리자' || curClass === 'ALL' || curClass === '전체' || curClass === '업무담당자')
-      : (curClass === targetClass);
+      : (curClass === targetClass || (curClassDigits && curClassDigits === targetClassDigits));
 
     if (isMatch && curPw === inputPw) {
       return {
@@ -175,7 +178,53 @@ function verifyTeacherLogin(className, password) {
   return { success: false, message: '비밀번호가 일치하지 않습니다.' };
 }
 
-// 4. 교사용 대시보드 데이터 조회 (캐시 명단 + 루프 최적화)
+// 지능형 학급 매칭 보조 함수 (8반, 8, 3-8, 30801 다양한 서식 호환)
+function isClassMatch(selectedClass, student) {
+  if (!selectedClass) return true;
+  const selStr = String(selectedClass).trim();
+
+  // 관리자 / 전체 / 0 / 업무담당자 모드
+  if (
+    selStr === '0' || selStr === 'ALL' || selStr === '관리자' || selStr === '업무담당자' || selStr === '전체' ||
+    selStr.startsWith('0') || selStr.includes('관리자') || selStr.includes('업무담당자')
+  ) {
+    return true;
+  }
+
+  const selDigits = selStr.replace(/[^0-9]/g, '');
+  const studentClassDigits = String(student.classNum).replace(/[^0-9]/g, '');
+
+  // 1) 문자열 완전 일치 (예: "8반" === "8반" 또는 "3-8" === "3-8")
+  if (selStr === student.classNum || selStr === `${student.grade}-${student.classNum}`) {
+    return true;
+  }
+
+  // 2) 숫자 변환 비교 (예: "8반" -> 8, "8" -> 8, "08" -> 8)
+  if (selDigits && studentClassDigits) {
+    if (parseInt(selDigits, 10) === parseInt(studentClassDigits, 10)) {
+      return true;
+    }
+    const fullClassDigits = (student.grade + studentClassDigits).replace(/[^0-9]/g, '');
+    if (parseInt(selDigits, 10) === parseInt(fullClassDigits, 10)) {
+      return true;
+    }
+  }
+
+  // 3) 학번 추출 비교 (예: 학번 30801 -> 반 8, 3801 -> 반 8)
+  if (student.studentId && selDigits) {
+    const sId = String(student.studentId).trim();
+    const targetNum = parseInt(selDigits, 10);
+    if (sId.length === 5) {
+      if (parseInt(sId.substring(1, 3), 10) === targetNum) return true;
+    } else if (sId.length === 4) {
+      if (parseInt(sId.substring(1, 2), 10) === targetNum) return true;
+    }
+  }
+
+  return false;
+}
+
+// 4. 교사용 대시보드 데이터 조회 (캐시 명단 + 지능형 학급 매칭)
 function getTeacherDashboardData(selectedClass) {
   const studentList = getStudentList();
 
@@ -186,7 +235,7 @@ function getTeacherDashboardData(selectedClass) {
   const statusMap = {};
   for (let i = 0; i < statusData.length; i++) {
     const row = statusData[i];
-    const sId = String(row[4]);
+    const sId = String(row[4]).trim();
     if (!sId) continue;
 
     const hasTimestampCol = row.length >= 15 || String(row[6]).includes('-') || String(row[6]).includes(':');
@@ -208,11 +257,6 @@ function getTeacherDashboardData(selectedClass) {
     };
   }
 
-  const isAdminMode = (
-    selectedClass === '0' || selectedClass === 'ALL' || selectedClass === '관리자' || selectedClass === '업무담당자' ||
-    String(selectedClass).startsWith('0') || String(selectedClass).includes('관리자') || String(selectedClass).includes('업무담당자')
-  );
-
   const resultList = [];
   const defaultStatus = {
     timestamp: '',
@@ -222,9 +266,9 @@ function getTeacherDashboardData(selectedClass) {
 
   for (let i = 0; i < studentList.length; i++) {
     const student = studentList[i];
-    const fullClassStr = `${student.grade}-${student.classNum}`;
 
-    if (!isAdminMode && fullClassStr !== selectedClass && student.classNum !== selectedClass) {
+    // 지능형 학급 매칭 적용
+    if (!isClassMatch(selectedClass, student)) {
       continue;
     }
 
