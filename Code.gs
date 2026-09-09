@@ -34,8 +34,27 @@ function getStudentList() {
 // 2. 학생 제출 처리 (등록 또는 수정)
 function submitStudentData(formData) {
   const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName('제출현황');
-  const data = sheet.getDataRange().getValues();
+  let sheet = ss.getSheetByName('제출현황');
+  
+  if (!sheet) {
+    sheet = ss.insertSheet('제출현황');
+  }
+  
+  let data = sheet.getDataRange().getValues();
+
+  // 헤더 검사 및 '답변 시간' 열(7번째 열) 자동 보정
+  if (data.length === 0 || (data.length > 0 && data[0].length === 0)) {
+    const headers = [
+      '순번', '학년', '반', '번호', '학번', '이름', '답변 시간',
+      '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.점검표', '8.작은박스'
+    ];
+    sheet.appendRow(headers);
+    data = sheet.getDataRange().getValues();
+  } else if (data[0].length < 15 || String(data[0][6]).trim() !== '답변 시간') {
+    sheet.insertColumnBefore(7);
+    sheet.getRange(1, 7).setValue('답변 시간');
+    data = sheet.getDataRange().getValues();
+  }
   
   const studentId = String(formData.studentId);
   let targetRowIndex = -1;
@@ -48,30 +67,36 @@ function submitStudentData(formData) {
     }
   }
 
+  // 서울 시간 기준 답변 시간 생성 (yyyy-MM-dd HH:mm:ss)
+  const now = new Date();
+  const timestamp = Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss');
+
+  // q1 ~ q8 항목 변환 ('제출' -> 1, '미제출' -> '')
+  const qKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
+  const qValues = qKeys.map(k => (formData[k] === '제출' ? 1 : ''));
+  const qColors = qKeys.map(k => (formData[k] === '제출' ? '#ffffff' : '#fce8e6')); // 파스텔 빨강: #fce8e6
+
   const rowValues = [
-    targetRowIndex > 0 ? data[targetRowIndex - 1][0] : data.length, // 순번 유지 또는 신규
+    targetRowIndex > 0 ? data[targetRowIndex - 1][0] : Math.max(data.length, 1),
     formData.grade,
     formData.classNum,
     formData.num,
     formData.studentId,
     formData.name,
-    formData.q1 || '미제출', // 디벗 기기를 학급 디벗함 본인의 번호에 제출하였는가?
-    formData.q2 || '미제출', // 가방에 학번&이름 라벨지를 붙인 후, 큰 박스에 제출하였는가?
-    formData.q3 || '미제출', // 충전 어댑터를 제출하였는가?
-    formData.q4 || '미제출', // 충전 케이블을 제출하였는가?
-    formData.q5 || '미제출', // 스타일러스 펜을 제출하였는가?
-    formData.q6 || '미제출', // usb 형태의 펜 홀더를 제출하였는가?
-    formData.q7 || '미제출', // 디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?
-    formData.q8 || '미제출'  // 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?
+    timestamp,
+    ...qValues
   ];
 
   if (targetRowIndex > 0) {
     sheet.getRange(targetRowIndex, 1, 1, rowValues.length).setValues([rowValues]);
+    sheet.getRange(targetRowIndex, 8, 1, 8).setBackgrounds([qColors]);
   } else {
     sheet.appendRow(rowValues);
+    const newRowIndex = sheet.getLastRow();
+    sheet.getRange(newRowIndex, 8, 1, 8).setBackgrounds([qColors]);
   }
 
-  return { success: true, name: formData.name, studentId: formData.studentId };
+  return { success: true, name: formData.name, studentId: formData.studentId, timestamp: timestamp };
 }
 
 // 3. 교사 로그인 및 담임교사 목록 불러오기
@@ -120,15 +145,21 @@ function getTeacherDashboardData(selectedClass) {
   const statusMap = {};
   statusData.forEach(row => {
     const sId = String(row[4]);
+    const hasTimestampCol = row.length >= 15 || String(row[6]).includes('-') || String(row[6]).includes(':');
+    const offset = hasTimestampCol ? 1 : 0;
+
+    const parseSubmitted = (val) => (val === 1 || String(val) === '1' || val === '제출') ? '제출' : '미제출';
+
     statusMap[sId] = {
-      q1: row[6] || '미제출',
-      q2: row[7] || '미제출',
-      q3: row[8] || '미제출',
-      q4: row[9] || '미제출',
-      q5: row[10] || '미제출',
-      q6: row[11] || '미제출',
-      q7: row[12] || '미제출',
-      q8: row[13] || '미제출'
+      timestamp: hasTimestampCol && row[6] ? String(row[6]) : '',
+      q1: parseSubmitted(row[6 + offset]),
+      q2: parseSubmitted(row[7 + offset]),
+      q3: parseSubmitted(row[8 + offset]),
+      q4: parseSubmitted(row[9 + offset]),
+      q5: parseSubmitted(row[10 + offset]),
+      q6: parseSubmitted(row[11 + offset]),
+      q7: parseSubmitted(row[12 + offset]),
+      q8: parseSubmitted(row[13 + offset])
     };
   });
 
@@ -148,6 +179,7 @@ function getTeacherDashboardData(selectedClass) {
     }
 
     const st = statusMap[studentId] || {
+      timestamp: '',
       q1: '미제출', q2: '미제출', q3: '미제출', q4: '미제출',
       q5: '미제출', q6: '미제출', q7: '미제출', q8: '미제출'
     };

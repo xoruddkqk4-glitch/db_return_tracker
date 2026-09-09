@@ -41,6 +41,13 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
 - **수정 내용**: `.agents` 스킬(git-commit) 적용 및 GitHub 원격 저장소(`https://github.com/xoruddkqk4-glitch/db_return_tracker`) 연동, `README.md` 문서 작성 및 프로젝트 구성 파일(Code.gs, index.html) 동기화
 - **검증 결과**: Git repository 초기화, 원격 저장소 연결, 코드 및 문서 검증 완료
 
-## [2026-09-09] 업데이트 이력 (Commit ID: 6b586bf)
+## [2026-09-09] 업데이트 이력 (Commit ID: 394ea6f)
 - **수정 내용**: `Code.gs` 4행의 `createTemplateFromFile('Index')`를 소문자 `'index'`로 변경하여 Apps Script 에러(`Index라는 이름의 HTML 파일을 찾을 수 없습니다`) 해결
 - **검증 결과**: HTML 파일명 대소문자 매칭 수정 완료
+
+## [2026-09-09] 업데이트 이력 (Commit ID: f92c132)
+- **수정 내용**:
+  1. `제출현황` 시트 서식 변경: '제출'은 숫자 `1`, '미제출'은 빈 값(`""`) 및 파스텔 빨간색(`#fce8e6`) 셀 배경 적용
+  2. '이름'과 'q1' 열 사이에 서울 시간 기준(`Asia/Seoul`) `답변 시간` 열 추가 및 최종 제출 시각 기록
+  3. 학생 제출 완료 팝업 안내 문구 변경 ("제출 현황이 제출 되었습니다. 다시 입력하면 마지막 제출 현황이 기록됩니다.")
+- **검증 결과**: 시트 데이터 포맷팅, 자동 열 삽입, 서울 타임존 시각 및 UI 문구 변경 검증 완료
