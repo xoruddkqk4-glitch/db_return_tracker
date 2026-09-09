@@ -46,7 +46,7 @@ function submitStudentData(formData) {
   if (data.length === 0 || (data.length > 0 && data[0].length === 0)) {
     const headers = [
       '순번', '학년', '반', '번호', '학번', '이름', '답변 시간',
-      '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.점검표', '8.작은박스'
+      '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.점검표'
     ];
     sheet.appendRow(headers);
     data = sheet.getDataRange().getValues();
@@ -128,8 +128,9 @@ function verifyTeacherLogin(className, password) {
     const curName = String(data[i][1]).trim();
     const curPw = String(data[i][2]).trim();
 
-    const isMatch = (targetClass === 'ALL' && (curClass === '관리자' || curClass === 'ALL' || curClass === '전체')) ||
-                    (curClass === targetClass);
+    const isMatch = (targetClass === '0' || targetClass === 'ALL' || targetClass === '관리자') 
+      ? (curClass === '0' || curClass === '관리자' || curClass === 'ALL' || curClass === '전체')
+      : (curClass === targetClass);
 
     if (isMatch && curPw === inputPw) {
       return { 
@@ -178,6 +179,11 @@ function getTeacherDashboardData(selectedClass) {
 
   const resultList = [];
 
+  const isAdminMode = (
+    selectedClass === '0' || selectedClass === 'ALL' || selectedClass === '관리자' ||
+    String(selectedClass).startsWith('0') || String(selectedClass).includes('관리자')
+  );
+
   studentData.forEach(row => {
     const grade = String(row[1]);
     const classNum = String(row[2]);
@@ -186,8 +192,8 @@ function getTeacherDashboardData(selectedClass) {
     const name = String(row[5]);
     const fullClassStr = `${grade}-${classNum}`;
 
-    // 특정 학급 필터링 ('ALL'이면 전체)
-    if (selectedClass !== 'ALL' && fullClassStr !== selectedClass && classNum !== selectedClass) {
+    // 특정 학급 필터링 ('0'이나 'ALL'이나 '관리자'면 전체 학생 조회)
+    if (!isAdminMode && fullClassStr !== selectedClass && classNum !== selectedClass) {
       return;
     }
 

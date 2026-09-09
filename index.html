@@ -229,10 +229,10 @@
                         </div>
                     </div>
 
-                    <!-- Q7 -->
+                    <!-- Q7 (위치 변경: 작은 박스) -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
                         <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
-                            7. '디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?
+                            7. 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
@@ -250,21 +250,26 @@
                         </div>
                     </div>
 
-                    <!-- Q8 -->
-                    <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
-                            8. 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?
-                        </p>
+                    <!-- Q8 (위치 변경: 반납 점검표 - 파스텔 노란색 강조 디자인) -->
+                    <div class="p-4 bg-amber-50/90 rounded-2xl border-2 border-amber-300/90 shadow-sm space-y-2.5 relative overflow-hidden ring-4 ring-amber-200/40">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs sm:text-sm font-bold text-amber-950 leading-snug flex items-center gap-1.5">
+                                <span>8. '디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?</span>
+                            </p>
+                            <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-amber-300 shrink-0">
+                                📋 서류 점검
+                            </span>
+                        </div>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q8" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q8" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -296,7 +301,6 @@
                         <label class="block text-xs font-semibold text-slate-700 mb-1">학급 선택</label>
                         <select id="selectTeacherClass" class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none bg-slate-50">
                             <option value="">학급 선택...</option>
-                            <option value="ALL">전체 보기 (관리자 암호 필요)</option>
                         </select>
                     </div>
                     <div>
@@ -336,43 +340,6 @@
                     </button>
                 </div>
 
-                <!-- 열별 현황 필터 바 -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-3.5 space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                            <span>🔍</span> <span>열별 현황 필터링</span>
-                        </span>
-                        <button onclick="resetFilter()" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-bold underline">
-                            필터 초기화
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">검색 항목</label>
-                            <select id="filterColumn" onchange="applyDashboardFilter()" class="w-full text-xs font-bold border-2 border-slate-200 rounded-xl px-2.5 py-2 bg-slate-50 text-slate-800 outline-none focus:border-indigo-600">
-                                <option value="ALL">전체 항목 보기</option>
-                                <option value="isComplete">최종 완료 여부</option>
-                                <option value="q1">1.기기</option>
-                                <option value="q2">2.큰박스</option>
-                                <option value="q3">3.어댑터</option>
-                                <option value="q4">4.케이블</option>
-                                <option value="q5">5.펜</option>
-                                <option value="q6">6.홀더</option>
-                                <option value="q7">7.점검표</option>
-                                <option value="q8">8.작은박스</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">제출 상태</label>
-                            <select id="filterStatus" onchange="applyDashboardFilter()" class="w-full text-xs font-bold border-2 border-slate-200 rounded-xl px-2.5 py-2 bg-slate-50 text-slate-800 outline-none focus:border-indigo-600">
-                                <option value="ALL">전체 상태 보기</option>
-                                <option value="미제출">❌ 미제출 학생만</option>
-                                <option value="제출">⭕ 제출 학생만</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 요약 카드 (3열) -->
                 <div class="grid grid-cols-3 gap-2 sm:gap-3">
                     <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-slate-200/80 text-center">
@@ -394,22 +361,42 @@
                     <!-- JS 동적 생성 -->
                 </div>
 
-                <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) -->
+                <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) - 헤더 클릭 시 오름차순/내림차순 정렬 -->
                 <div id="tableDashboardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hidden sm:block">
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs sm:text-sm text-left text-slate-600">
-                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b">
+                            <thead class="text-[11px] sm:text-xs text-slate-700 uppercase bg-slate-100/90 border-b select-none">
                                 <tr>
-                                    <th class="px-3 py-3 font-bold">학번/이름</th>
-                                    <th class="px-2 py-3 text-center font-bold">최종</th>
-                                    <th class="px-2 py-3 text-center">1.기기</th>
-                                    <th class="px-2 py-3 text-center">2.큰박스</th>
-                                    <th class="px-2 py-3 text-center">3.어댑터</th>
-                                    <th class="px-2 py-3 text-center">4.케이블</th>
-                                    <th class="px-2 py-3 text-center">5.펜</th>
-                                    <th class="px-2 py-3 text-center">6.홀더</th>
-                                    <th class="px-2 py-3 text-center">7.점검표</th>
-                                    <th class="px-2 py-3 text-center">8.작은박스</th>
+                                    <th onclick="handleSort('studentId')" class="px-3 py-3 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        학번/이름 <span id="sort-studentId">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('isComplete')" class="px-2 py-3 text-center font-bold cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        최종 <span id="sort-isComplete">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q1')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        1.기기 <span id="sort-q1">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q2')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        2.큰박스 <span id="sort-q2">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q3')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        3.어댑터 <span id="sort-q3">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q4')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        4.케이블 <span id="sort-q4">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q5')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        5.펜 <span id="sort-q5">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q6')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        6.홀더 <span id="sort-q6">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q7')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        7.작은박스 <span id="sort-q7">↕</span>
+                                    </th>
+                                    <th onclick="handleSort('q8')" class="px-2 py-3 text-center cursor-pointer hover:bg-slate-200/70 transition-colors">
+                                        8.점검표 <span id="sort-q8">↕</span>
+                                    </th>
                                     <th class="px-2 py-3 text-center">수정</th>
                                 </tr>
                             </thead>
@@ -450,6 +437,8 @@
         let globalStudentList = [];
         let currentDashboardData = [];
         let currentTeacherClass = '';
+        let currentSortCol = 'studentId';
+        let currentSortDir = 'asc';
 
         window.onload = function () {
             // 초기 학생 명단 & 교사 목록 불러오기
@@ -459,11 +448,12 @@
 
             google.script.run.withSuccessHandler(function (teachers) {
                 const select = document.getElementById('selectTeacherClass');
+                select.innerHTML = '<option value="">학급 선택...</option>';
                 (teachers || []).forEach(t => {
                     const opt = document.createElement('option');
                     opt.value = t.className;
-                    opt.textContent = t.className === 'ALL' 
-                        ? '전체 보기 (관리자 암호 필요)' 
+                    opt.textContent = (t.className === '0' || t.className === '관리자')
+                        ? `${t.className} (${t.name} 선생님)` 
                         : `${t.className} (${t.name} 선생님)`;
                     select.appendChild(opt);
                 });
@@ -579,7 +569,7 @@
                 }
                 if (res && res.success) {
                     currentTeacherClass = className;
-                    const displayTitle = className === 'ALL' 
+                    const displayTitle = (className === '0' || className === '관리자')
                         ? `전체 학급 (${res.teacherName} 모드)` 
                         : `${className} (${res.teacherName} 선생님)`;
                     showDashboard(displayTitle);
@@ -606,43 +596,56 @@
         function loadDashboardData() {
             google.script.run.withSuccessHandler(function(data) {
                 currentDashboardData = data || [];
-                resetFilter();
+                sortAndRenderDashboard();
             }).getTeacherDashboardData(currentTeacherClass);
         }
 
-        function resetFilter() {
-            document.getElementById('filterColumn').value = 'ALL';
-            document.getElementById('filterStatus').value = 'ALL';
-            renderDashboard(currentDashboardData);
+        // 테이블 열 클릭 시 오름차순/내림차순 정렬
+        function handleSort(colKey) {
+            if (currentSortCol === colKey) {
+                currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortCol = colKey;
+                currentSortDir = 'asc';
+            }
+            sortAndRenderDashboard();
         }
 
-        function applyDashboardFilter() {
-            const col = document.getElementById('filterColumn').value;
-            const stat = document.getElementById('filterStatus').value;
+        function sortAndRenderDashboard() {
+            currentDashboardData.sort((a, b) => {
+                let valA, valB;
+                if (currentSortCol === 'studentId') {
+                    valA = parseInt(a.studentId) || 0;
+                    valB = parseInt(b.studentId) || 0;
+                } else if (currentSortCol === 'isComplete') {
+                    valA = a.isComplete ? 1 : 0;
+                    valB = b.isComplete ? 1 : 0;
+                } else {
+                    valA = a.status[currentSortCol] === '제출' ? 1 : 0;
+                    valB = b.status[currentSortCol] === '제출' ? 1 : 0;
+                }
 
-            let filtered = currentDashboardData;
+                if (valA < valB) return currentSortDir === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSortDir === 'asc' ? 1 : -1;
+                return 0;
+            });
 
-            if (col !== 'ALL' || stat !== 'ALL') {
-                filtered = currentDashboardData.filter(item => {
-                    if (col === 'isComplete') {
-                        if (stat === '제출') return item.isComplete;
-                        if (stat === '미제출') return !item.isComplete;
-                        return true;
-                    } else if (col !== 'ALL') {
-                        const val = item.status[col];
-                        if (stat === '제출') return val === '제출';
-                        if (stat === '미제출') return val !== '제출';
-                        return true;
+            // 정렬 화살표 표시 업데이트
+            const sortCols = ['studentId', 'isComplete', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
+            sortCols.forEach(col => {
+                const el = document.getElementById(`sort-${col}`);
+                if (el) {
+                    if (col === currentSortCol) {
+                        el.textContent = currentSortDir === 'asc' ? '▲' : '▼';
+                        el.className = 'text-indigo-600 font-bold ml-0.5';
                     } else {
-                        // col이 ALL이고 stat만 지정된 경우 (미제출/제출)
-                        if (stat === '미제출') return !item.isComplete;
-                        if (stat === '제출') return item.isComplete;
-                        return true;
+                        el.textContent = '↕';
+                        el.className = 'text-slate-400 font-normal ml-0.5';
                     }
-                });
-            }
+                }
+            });
 
-            renderDashboard(filtered);
+            renderDashboard(currentDashboardData);
         }
 
         // 모바일 카드 & 데스크탑 테이블 통합 렌더링
@@ -655,14 +658,11 @@
 
             let completeCount = 0;
 
-            const qLabels = ['1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.점검표', '8.작은박스'];
-
-            // 전체 카운트는 currentDashboardData 기준
-            currentDashboardData.forEach(item => {
-                if (item.isComplete) completeCount++;
-            });
+            const qLabels = ['1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.점검표'];
 
             displayData.forEach(item => {
+                if (item.isComplete) completeCount++;
+
                 const badgeClass = item.isComplete ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200';
                 const statusText = item.isComplete ? '완료' : '미완료';
 
@@ -729,9 +729,9 @@
                 mobileCardList.appendChild(card);
             });
 
-            document.getElementById('statTotal').textContent = `${currentDashboardData.length}명`;
+            document.getElementById('statTotal').textContent = `${displayData.length}명`;
             document.getElementById('statComplete').textContent = `${completeCount}명`;
-            document.getElementById('statIncomplete').textContent = `${currentDashboardData.length - completeCount}명`;
+            document.getElementById('statIncomplete').textContent = `${displayData.length - completeCount}명`;
         }
 
         function renderStatusCell(val) {
@@ -750,7 +750,7 @@
 
             const qLabels = {
                 q1: '1.기기', q2: '2.큰박스', q3: '3.어댑터', q4: '4.케이블',
-                q5: '5.펜', q6: '6.홀더', q7: '7.점검표', q8: '8.작은박스'
+                q5: '5.펜', q6: '6.홀더', q7: '7.작은박스', q8: '8.점검표'
             };
 
             let text = `[디벗 미제출/미완료 명단 - 총 ${incompleteList.length}명]\n`;
@@ -766,7 +766,7 @@
             });
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('미제출자 명단이 미제출 항목 정보와 함께 클립보드에 복사되었습니다. 메신저 등에 붙여넣어 활용하세요.');
+                alert('미제출자 명단이 미제출 항목 정보와 함께 클립보드에 복사되었습니다. 학급 안내 메시지 등에 붙여넣어 활용하세요.');
             }).catch(() => {
                 alert('명단 복사에 실패했습니다. 수동으로 복사해 주세요.\n\n' + text);
             });
