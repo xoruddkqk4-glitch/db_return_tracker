@@ -1,7 +1,7 @@
 const SPREADSHEET_ID = '1HARxvAUNLEI_InOhMKoz3fMJpPUOe9QBePHkQnb8gjY';
 
 function doGet() {
-  return HtmlService.createTemplateFromFile('Index')
+  return HtmlService.createTemplateFromFile('index')
     .evaluate()
     .setTitle('DB Return Tracker - 디벗 양품화 제출 현황')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')

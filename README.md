@@ -40,3 +40,7 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
 ## [2026-09-09] 업데이트 이력 (Commit ID: 23e51e0)
 - **수정 내용**: `.agents` 스킬(git-commit) 적용 및 GitHub 원격 저장소(`https://github.com/xoruddkqk4-glitch/db_return_tracker`) 연동, `README.md` 문서 작성 및 프로젝트 구성 파일(Code.gs, index.html) 동기화
 - **검증 결과**: Git repository 초기화, 원격 저장소 연결, 코드 및 문서 검증 완료
+
+## [2026-09-09] 업데이트 이력 (Commit ID: 6b586bf)
+- **수정 내용**: `Code.gs` 4행의 `createTemplateFromFile('Index')`를 소문자 `'index'`로 변경하여 Apps Script 에러(`Index라는 이름의 HTML 파일을 찾을 수 없습니다`) 해결
+- **검증 결과**: HTML 파일명 대소문자 매칭 수정 완료
