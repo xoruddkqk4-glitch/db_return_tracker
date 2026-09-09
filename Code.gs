@@ -117,13 +117,26 @@ function getTeacherList() {
 function verifyTeacherLogin(className, password) {
   const ss = getSpreadsheet();
   const sheet = ss.getSheetByName('담임교사명단');
+  if (!sheet) return { success: false, message: '담임교사명단 시트를 찾을 수 없습니다.' };
   const data = sheet.getDataRange().getValues();
   
+  const targetClass = String(className).trim();
+  const inputPw = String(password).trim();
+
   for (let i = 1; i < data.length; i++) {
-    const curClass = String(data[i][0]);
-    const curPw = String(data[i][2]);
-    if (curClass === className && curPw === String(password)) {
-      return { success: true, className: curClass, teacherName: String(data[i][1]) };
+    const curClass = String(data[i][0]).trim();
+    const curName = String(data[i][1]).trim();
+    const curPw = String(data[i][2]).trim();
+
+    const isMatch = (targetClass === 'ALL' && (curClass === '관리자' || curClass === 'ALL' || curClass === '전체')) ||
+                    (curClass === targetClass);
+
+    if (isMatch && curPw === inputPw) {
+      return { 
+        success: true, 
+        className: targetClass, 
+        teacherName: curName || '관리자' 
+      };
     }
   }
   return { success: false, message: '비밀번호가 일치하지 않습니다.' };
