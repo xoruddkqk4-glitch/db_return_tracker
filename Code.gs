@@ -93,8 +93,8 @@ function submitStudentData(formData) {
   const timestamp = Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss');
 
   const qKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
-  const qValues = qKeys.map(k => (formData[k] === '제출' ? 1 : ''));
-  const qColors = qKeys.map(k => (formData[k] === '제출' ? '#ffffff' : '#fce8e6'));
+  const qValues = qKeys.map(k => (formData[k] === '제출' ? 1 : 0));
+  const qColors = qKeys.map(() => '#ffffff');
 
   const rowValues = [
     targetRowIndex > 0 ? data[targetRowIndex - 1][0] : Math.max(data.length, 1),
