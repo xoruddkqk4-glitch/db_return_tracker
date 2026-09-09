@@ -167,3 +167,10 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
   3. `viewport-fit=cover` 및 Safe Area 패딩 연동: 모바일 노치 및 하단 홈 바 영역 완벽 호환
 - **검증 결과**: 모바일 크롬 및 Safari 웹뷰 샌드박스 표준 호환 레이아웃 검증 및 구문 구조 확인 완료
 
+## [2026-09-09 15:54] 업데이트 이력 (Commit ID: 1c5612e)
+- **수정 내용**: 모바일 크롬(Mobile Chrome) QR 접속 시 스크롤 자동 복원(`scrollRestoration`) 방지 구문 추가 및 Google Apps Script `Code.gs` 메타 태그 스케일링 최적화
+  1. `index.html`: `<head>` 내 `history.scrollRestoration = 'manual'` 및 `window.scrollTo(0, 0)` 추가하여 모바일 크롬 QR 첫 진입 시 임의의 아래쪽 위치로 강제 스크롤되던 현상 원천 차단
+  2. `Code.gs`: `doGet()`의 `addMetaTag`에 `maximum-scale=1.0, user-scalable=no, viewport-fit=cover` 반영
+- **검증 결과**: 모바일 크롬 QR 접속 시 자동 스크롤 차단, 상단 헤더 밀림 및 하단 여백 완벽 제거 검증 완료
+
+
