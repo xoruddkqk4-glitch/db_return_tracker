@@ -325,14 +325,21 @@
 
                 <!-- 대시보드 모바일 바 & 컨트롤 -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 space-y-3">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center gap-2 flex-wrap sm:flex-nowrap">
                         <div>
                             <span id="txtTeacherBadge" class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
                             <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-slate-900 mt-1">제출 현황 모니터링</h2>
                         </div>
-                        <button onclick="logoutTeacher()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
-                            <span>🔙</span> <span>이전 화면으로 돌아가기</span>
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button id="btnRefreshDashboard" onclick="refreshDashboardData()"
+                                class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95">
+                                <span id="iconRefresh" class="inline-block">🔄</span>
+                                <span id="txtRefresh">새로 고침</span>
+                            </button>
+                            <button onclick="logoutTeacher()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm shrink-0">
+                                <span>🔙</span> <span>이전 화면으로 돌아가기</span>
+                            </button>
+                        </div>
                     </div>
                     
                     <button onclick="copyUnsubmittedList()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
@@ -667,6 +674,32 @@
                 currentSummaryFilter = 'all';
                 updateSummaryCardStyles();
                 sortAndRenderDashboard();
+            }).getTeacherDashboardData(currentTeacherClass);
+        }
+
+        // 대시보드 데이터 실시간 새로 고침 (동적 스핀 애니메이션 & 로딩 상태 표출)
+        function refreshDashboardData() {
+            const btn = document.getElementById('btnRefreshDashboard');
+            const icon = document.getElementById('iconRefresh');
+            const txt = document.getElementById('txtRefresh');
+
+            if (btn) btn.disabled = true;
+            if (icon) icon.classList.add('animate-spin');
+            if (txt) txt.textContent = '새로 고침 중...';
+
+            google.script.run.withSuccessHandler(function(data) {
+                currentDashboardData = data || [];
+                updateSummaryCardStyles();
+                sortAndRenderDashboard();
+
+                if (icon) icon.classList.remove('animate-spin');
+                if (txt) txt.textContent = '새로 고침';
+                if (btn) btn.disabled = false;
+            }).withFailureHandler(function(err) {
+                if (icon) icon.classList.remove('animate-spin');
+                if (txt) txt.textContent = '새로 고침';
+                if (btn) btn.disabled = false;
+                alert('데이터를 불러오는 중 오류가 발생했습니다.');
             }).getTeacherDashboardData(currentTeacherClass);
         }
 
