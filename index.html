@@ -14,6 +14,7 @@
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            color: #313339;
         }
         .font-outfit {
             font-family: 'Outfit', sans-serif;
@@ -21,26 +22,26 @@
     </style>
 </head>
 
-<body class="bg-slate-100 min-h-screen text-slate-800 pb-16 antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-100 min-h-screen text-[#313339] pb-16 antialiased selection:bg-[#027046] selection:text-white">
 
-    <!-- 상단 고정 모바일 네비게이션 -->
-    <header class="sticky top-0 z-40 bg-indigo-900/95 backdrop-blur-md text-white shadow-lg border-b border-indigo-800/50">
+    <!-- 상단 고정 모바일 네비게이션 (서브 테마색: 파란색 #05014A) -->
+    <header class="sticky top-0 z-40 bg-[#05014A] backdrop-blur-md text-white shadow-lg border-b border-[#05014A]">
         <div class="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <span class="text-2xl">📱</span>
                 <div>
                     <h1 class="text-base sm:text-lg font-extrabold tracking-tight font-outfit leading-none text-white">DB Return Tracker</h1>
-                    <p class="text-[10px] sm:text-xs text-indigo-200 mt-0.5">디벗 양품화 제출 현황</p>
+                    <p class="text-[10px] sm:text-xs text-emerald-200 mt-0.5">디벗 양품화 제출 현황</p>
                 </div>
             </div>
             <!-- 세그먼트 탭 버튼 -->
-            <div class="bg-indigo-950/60 p-1 rounded-xl flex space-x-1 border border-indigo-700/40">
+            <div class="bg-white/10 p-1 rounded-xl flex space-x-1 border border-white/20">
                 <button onclick="switchTab('student')" id="btn-tab-student"
-                    class="px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1">
+                    class="px-3 py-1.5 rounded-lg bg-[#027046] text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1">
                     <span>🎓</span> <span>학생용</span>
                 </button>
                 <button onclick="switchTab('teacher')" id="btn-tab-teacher"
-                    class="px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1">
+                    class="px-3 py-1.5 rounded-lg text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1">
                     <span>👩‍🏫</span> <span>교사용</span>
                 </button>
             </div>
@@ -52,27 +53,27 @@
         <!-- ================= 1. 학생 제출 화면 (Mobile Optimized) ================= -->
         <section id="view-student" class="space-y-4">
 
-            <!-- 타이틀 카운터 & 안내 -->
-            <div class="bg-gradient-to-r from-indigo-700 to-purple-700 rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
+            <!-- 타이틀 카운터 & 안내 (기본/서브 테마 그라데이션) -->
+            <div class="bg-gradient-to-r from-[#05014A] via-[#027046] to-[#05014A] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
                 <div class="absolute -right-4 -bottom-4 opacity-10 text-8xl font-black font-outfit select-none">CHECK</div>
                 <h2 class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
                     <span>디벗 양품화 구성품 제출</span>
                 </h2>
-                <p class="text-xs sm:text-sm text-indigo-100 mt-1 leading-relaxed">
+                <p class="text-xs sm:text-sm text-emerald-100 mt-1 leading-relaxed">
                     본인 학번 5자리를 입력 후 8가지 반납 구성품 제출 여부를 정확히 선택해 주세요.
                 </p>
             </div>
 
             <form id="studentForm" onsubmit="handleStudentSubmit(event)" class="space-y-4">
 
-                <!-- 1. 학번 5자리 입력 카드 (시각적 강조 디자인) -->
-                <div class="bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/80 rounded-2xl shadow-md border-2 border-indigo-500/80 p-4 sm:p-5 relative overflow-hidden ring-4 ring-indigo-500/10">
+                <!-- 1. 학번 5자리 입력 카드 (기본 테마색 #027046 강조) -->
+                <div class="bg-white rounded-2xl shadow-md border-2 border-[#027046]/60 p-4 sm:p-5 relative overflow-hidden ring-4 ring-[#027046]/10">
                     <div class="flex justify-between items-center mb-3">
-                        <label class="font-extrabold text-sm sm:text-base text-indigo-950 flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-outfit text-xs font-bold shadow-sm">1</span>
+                        <label class="font-extrabold text-sm sm:text-base text-[#313339] flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-[#027046] text-white flex items-center justify-center font-outfit text-xs font-bold shadow-sm">1</span>
                             <span>학번 5자리 입력</span>
                         </label>
-                        <span class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-full border border-indigo-200">
+                        <span class="bg-[#027046]/10 text-[#027046] text-[11px] font-bold px-2.5 py-1 rounded-full border border-[#027046]/20">
                             실시간 이름 자동 조회
                         </span>
                     </div>
@@ -80,11 +81,11 @@
                         <div class="relative">
                             <input type="tel" id="inputStudentId" required maxlength="5" pattern="\d{5}" inputmode="numeric"
                                 placeholder="예: 30101" oninput="onStudentIdChange()"
-                                class="w-full px-4 py-3.5 border-2 border-indigo-400 bg-white rounded-xl focus:border-indigo-600 focus:ring-4 focus:ring-indigo-200 text-center font-outfit font-extrabold text-2xl text-indigo-950 shadow-inner tracking-wider outline-none transition-all placeholder:text-slate-300">
+                                class="w-full px-4 py-3.5 border-2 border-[#027046]/40 bg-white rounded-xl focus:border-[#027046] focus:ring-4 focus:ring-[#027046]/20 text-center font-outfit font-extrabold text-2xl text-[#313339] shadow-inner tracking-wider outline-none transition-all placeholder:text-slate-300">
                         </div>
                         <div>
                             <input type="text" id="inputStudentName" readonly placeholder="학번 입력 시 자동 표시"
-                                class="w-full px-4 py-3.5 border-2 border-slate-200 bg-slate-100/90 rounded-xl text-center font-extrabold text-lg text-indigo-700 transition-all shadow-sm">
+                                class="w-full px-4 py-3.5 border-2 border-slate-200 bg-slate-50 rounded-xl text-center font-extrabold text-lg text-[#027046] transition-all shadow-sm">
                         </div>
                     </div>
                 </div>
@@ -97,27 +98,27 @@
                 <!-- 2. 체크리스트 항목 (터치 친화적 세그먼트 버튼) -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5 space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                        <h3 class="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
-                            <span class="w-2 h-4 bg-indigo-600 rounded-full"></span>
+                        <h3 class="font-bold text-[#313339] text-sm sm:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-4 bg-[#027046] rounded-full"></span>
                             <span>2. 구성품 제출 체크리스트 (총 8문항)</span>
                         </h3>
                     </div>
 
                     <!-- Q1 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             1. 디벗 기기를 학급 디벗함 본인의 번호에 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q1" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q1" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -126,19 +127,19 @@
 
                     <!-- Q2 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             2. 가방에 학번&이름 라벨지를 붙인 후, 큰 박스에 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q2" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q2" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -147,19 +148,19 @@
 
                     <!-- Q3 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             3. 충전 어댑터를 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q3" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q3" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -168,19 +169,19 @@
 
                     <!-- Q4 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             4. 충전 케이블을 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q4" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q4" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -189,19 +190,19 @@
 
                     <!-- Q5 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             5. 스타일러스 펜을 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q5" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q5" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -210,66 +211,66 @@
 
                     <!-- Q6 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             6. USB 형태의 펜 홀더를 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q6" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q6" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Q7 (위치 변경: 작은 박스) -->
+                    <!-- Q7 -->
                     <div class="p-3.5 bg-slate-50/80 rounded-xl border border-slate-100 space-y-2">
-                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        <p class="text-xs sm:text-sm font-semibold text-[#313339] leading-snug">
                             7. 지퍼백에 학번&이름 라벨지를 붙인 후, 작은 박스에 제출하였는가?
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q7" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q7" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-600 border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-slate-200 hover:bg-slate-100 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Q8 (위치 변경: 반납 점검표 - 파스텔 노란색 강조 디자인) -->
+                    <!-- Q8 (반납 점검표) -->
                     <div class="p-4 bg-amber-50/90 rounded-2xl border-2 border-amber-300/90 shadow-sm space-y-2.5 relative overflow-hidden ring-4 ring-amber-200/40">
                         <div class="flex items-center justify-between">
-                            <p class="text-xs sm:text-sm font-bold text-amber-950 leading-snug flex items-center gap-1.5">
+                            <p class="text-xs sm:text-sm font-bold text-[#313339] leading-snug flex items-center gap-1.5">
                                 <span>8. '디벗 반납 점검표'를 작성하여 담임선생님에게 제출하였는가?</span>
                             </p>
-                            <span class="bg-amber-200 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-amber-300 shrink-0">
+                            <span class="bg-amber-200 text-amber-950 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-amber-300 shrink-0">
                                 📋 서류 점검
                             </span>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="cursor-pointer">
                                 <input type="radio" name="q8" value="제출" required class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-checked:shadow-md bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-[#027046] peer-checked:text-white peer-checked:border-[#027046] peer-checked:shadow-md bg-white text-[#313339] border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
                                     <span>✓</span> <span>제출</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="q8" value="미제출" class="peer sr-only">
-                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-md bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
+                                <div class="py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all duration-150 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-md bg-white text-[#313339] border-amber-200 hover:bg-amber-100/50 flex items-center justify-center gap-1">
                                     <span>✕</span> <span>미제출</span>
                                 </div>
                             </label>
@@ -278,9 +279,9 @@
 
                 </div>
 
-                <!-- 제출 버튼 -->
+                <!-- 제출 버튼 (기본 테마 녹색 #027046 사용) -->
                 <button type="submit" id="btnSubmitStudent"
-                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-base sm:text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
+                    class="w-full bg-[#027046] hover:bg-[#015837] text-white font-extrabold text-base sm:text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
                     <span>🚀</span> <span>제출 정보 등록하기</span>
                 </button>
             </form>
@@ -293,14 +294,14 @@
             <div id="teacherLoginBox" class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 max-w-md mx-auto space-y-4">
                 <div class="text-center space-y-1">
                     <span class="text-3xl">🔐</span>
-                    <h2 class="text-lg font-bold text-slate-900">교사 인증 대시보드</h2>
+                    <h2 class="text-lg font-bold text-[#313339]">교사 인증 대시보드</h2>
                     <p class="text-xs text-slate-500">담당 학급 버튼을 선택 후 비밀번호를 입력해 주세요.</p>
                 </div>
                 <div class="space-y-4">
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700">학급 선택</label>
-                            <span id="txtSelectedClassNotice" class="text-[11px] text-indigo-600 font-semibold">학급 버튼을 선택하세요</span>
+                            <label class="text-xs font-bold text-[#313339]">학급 선택</label>
+                            <span id="txtSelectedClassNotice" class="text-[11px] text-[#027046] font-semibold">학급 버튼을 선택하세요</span>
                         </div>
                         <input type="hidden" id="selectTeacherClass" value="">
                         <!-- 2x5 배열 학급 선택 버튼 그리드 -->
@@ -309,12 +310,12 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">비밀번호</label>
+                        <label class="block text-xs font-semibold text-[#313339] mb-1">비밀번호</label>
                         <input type="password" id="inputTeacherPw" placeholder="비밀번호 입력"
-                            class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none bg-slate-50">
+                            class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:border-[#027046] focus:ring-2 focus:ring-[#027046]/20 outline-none bg-slate-50 text-[#313339]">
                     </div>
                     <button id="btnTeacherLogin" onclick="handleTeacherLogin()"
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-1.5">
+                        class="w-full bg-[#027046] hover:bg-[#015837] text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-1.5">
                         <span>🔓</span> <span>대시보드 접속</span>
                     </button>
                 </div>
@@ -327,12 +328,12 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 space-y-3">
                     <div class="flex justify-between items-center gap-2 flex-wrap sm:flex-nowrap">
                         <div>
-                            <span id="txtTeacherBadge" class="bg-indigo-100 text-indigo-800 text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
-                            <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-slate-900 mt-1">제출 현황 모니터링</h2>
+                            <span id="txtTeacherBadge" class="bg-[#05014A]/10 text-[#05014A] text-[11px] font-bold px-2.5 py-1 rounded-md">담임교사 모드</span>
+                            <h2 id="txtDashboardTitle" class="text-base sm:text-lg font-bold text-[#313339] mt-1">제출 현황 모니터링</h2>
                         </div>
                         <div class="flex items-center gap-2">
                             <button id="btnRefreshDashboard" onclick="refreshDashboardData()"
-                                class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95">
+                                class="px-3 py-2 bg-[#027046]/10 hover:bg-[#027046]/20 text-[#027046] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95">
                                 <span id="iconRefresh" class="inline-block">🔄</span>
                                 <span id="txtRefresh">새로 고침</span>
                             </button>
@@ -342,7 +343,7 @@
                         </div>
                     </div>
                     
-                    <button onclick="copyUnsubmittedList()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
+                    <button onclick="copyUnsubmittedList()" class="w-full bg-[#05014A] hover:bg-[#05014A]/90 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
                         <span>📋</span> <span>미제출자 명단 (미제출 항목 포함) 원클릭 복사</span>
                     </button>
                 </div>
@@ -350,14 +351,14 @@
                 <!-- 요약 카드 (3열 - 클릭 시 완료/미완료 실시간 필터링) -->
                 <div class="grid grid-cols-3 gap-2 sm:gap-3 select-none">
                     <div id="cardStatTotal" onclick="filterSummary('all')"
-                        class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border-2 border-indigo-600 ring-4 ring-indigo-100 font-bold shadow-md bg-indigo-50/30 cursor-pointer text-center transition-all duration-150 active:scale-[0.98]">
+                        class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border-2 border-[#05014A] ring-4 ring-[#05014A]/10 font-bold shadow-md bg-[#05014A]/5 text-[#05014A] cursor-pointer text-center transition-all duration-150 active:scale-[0.98]">
                         <p class="text-[11px] sm:text-xs text-slate-500 font-bold">전체 학생</p>
-                        <p id="statTotal" class="text-xl sm:text-2xl font-black text-slate-800 font-outfit mt-0.5">0명</p>
+                        <p id="statTotal" class="text-xl sm:text-2xl font-black text-[#05014A] font-outfit mt-0.5">0명</p>
                     </div>
                     <div id="cardStatComplete" onclick="filterSummary('complete')"
-                        class="bg-emerald-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border-2 border-emerald-200 hover:border-emerald-400 cursor-pointer text-center transition-all duration-150 active:scale-[0.98]">
-                        <p class="text-[11px] sm:text-xs text-emerald-700 font-bold">완료 학생</p>
-                        <p id="statComplete" class="text-xl sm:text-2xl font-black text-emerald-600 font-outfit mt-0.5">0명</p>
+                        class="bg-[#027046]/5 p-3 sm:p-4 rounded-2xl shadow-sm border-2 border-[#027046]/30 hover:border-[#027046] cursor-pointer text-center transition-all duration-150 active:scale-[0.98]">
+                        <p class="text-[11px] sm:text-xs text-[#027046] font-bold">완료 학생</p>
+                        <p id="statComplete" class="text-xl sm:text-2xl font-black text-[#027046] font-outfit mt-0.5">0명</p>
                     </div>
                     <div id="cardStatIncomplete" onclick="filterSummary('incomplete')"
                         class="bg-rose-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border-2 border-rose-200 hover:border-rose-400 cursor-pointer text-center transition-all duration-150 active:scale-[0.98]">
@@ -374,8 +375,8 @@
                 <!-- 2) 데스크탑 / 태블릿 테이블 View (Desktop Display) - 한 줄 표시 & 헤더 클릭 정렬 -->
                 <div id="tableDashboardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hidden sm:block">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-600 whitespace-nowrap">
-                            <thead class="text-[10px] sm:text-[11px] text-slate-700 uppercase bg-slate-100/90 border-b select-none whitespace-nowrap">
+                        <table class="w-full text-xs text-left text-[#313339] whitespace-nowrap">
+                            <thead class="text-[10px] sm:text-[11px] text-[#313339] uppercase bg-slate-100/90 border-b select-none whitespace-nowrap">
                                 <tr>
                                     <th onclick="handleSort('studentId')" class="px-1.5 py-2 font-bold cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         학번/이름 <span id="sort-studentId">↕</span>
@@ -426,20 +427,20 @@
     <!-- 제출 완료 팝업 (확인증 Modal) -->
     <div id="receiptModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 max-w-xs sm:max-w-sm w-full text-center space-y-4 shadow-2xl border border-slate-100 transform transition-all animate-in fade-in zoom-in duration-200">
-            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+            <div class="w-14 h-14 bg-[#027046]/10 text-[#027046] rounded-full flex items-center justify-center mx-auto text-3xl font-extrabold shadow-inner">
                 ✓
             </div>
             <div class="space-y-1">
-                <h3 class="text-lg font-bold text-slate-900">제출이 등록되었습니다!</h3>
+                <h3 class="text-lg font-bold text-[#313339]">제출이 등록되었습니다!</h3>
                 <p id="modalTimestamp" class="text-[11px] text-slate-400 font-outfit"></p>
             </div>
             <div class="bg-slate-50 p-3.5 rounded-2xl text-left text-xs sm:text-sm space-y-1.5 border border-slate-100">
-                <p class="flex justify-between"><span class="font-semibold text-slate-500">학번:</span> <span id="modalStudentId" class="font-extrabold text-slate-900 font-outfit"></span></p>
-                <p class="flex justify-between"><span class="font-semibold text-slate-500">이름:</span> <span id="modalStudentName" class="font-bold text-indigo-700"></span></p>
+                <p class="flex justify-between"><span class="font-semibold text-slate-500">학번:</span> <span id="modalStudentId" class="font-extrabold text-[#313339] font-outfit"></span></p>
+                <p class="flex justify-between"><span class="font-semibold text-slate-500">이름:</span> <span id="modalStudentName" class="font-bold text-[#027046]"></span></p>
             </div>
             <p class="text-xs text-slate-500 leading-relaxed px-1">다시 입력하면 마지막 제출 현황이 기록됩니다.</p>
             <button onclick="closeModal()"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-sm shadow-md transition-all">확인</button>
+                class="w-full bg-[#027046] hover:bg-[#015837] active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-sm shadow-md transition-all">확인</button>
         </div>
     </div>
 
@@ -486,7 +487,7 @@
                 const fontClass = isLong
                     ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
                     : 'text-xs sm:text-sm px-1 sm:px-2';
-                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center shadow-sm active:scale-95`;
+                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-[#313339] hover:border-[#027046] hover:bg-[#027046]/10 transition-all text-center shadow-sm active:scale-95`;
 
                 btn.onclick = function () { selectTeacherClassBtn(t.className, btn); };
                 grid.appendChild(btn);
@@ -502,13 +503,13 @@
                 const fontClass = isLong
                     ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
                     : 'text-xs sm:text-sm px-1 sm:px-2';
-                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center shadow-sm active:scale-95`;
+                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-[#313339] hover:border-[#027046] hover:bg-[#027046]/10 transition-all text-center shadow-sm active:scale-95`;
             });
             const isSelLong = selectedBtn.textContent.length >= 4;
             const fontSelClass = isSelLong
                 ? 'text-[10px] sm:text-xs px-0.5 tracking-tighter whitespace-nowrap overflow-visible'
                 : 'text-xs sm:text-sm px-1 sm:px-2';
-            selectedBtn.className = `class-select-btn py-2.5 ${fontSelClass} font-black rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white shadow-md transition-all text-center scale-[1.02] ring-2 ring-indigo-200`;
+            selectedBtn.className = `class-select-btn py-2.5 ${fontSelClass} font-black rounded-xl border-2 border-[#027046] bg-[#027046] text-white shadow-md transition-all text-center scale-[1.02] ring-2 ring-[#027046]/20`;
 
             const notice = document.getElementById('txtSelectedClassNotice');
             if (notice) {
@@ -519,7 +520,7 @@
                 );
                 const labelStr = isAdmin ? '업무담당자' : valStr;
                 notice.textContent = `선택: ${labelStr}`;
-                notice.className = 'text-[11px] text-indigo-700 font-extrabold bg-indigo-100 px-2 py-0.5 rounded-full';
+                notice.className = 'text-[11px] text-[#027046] font-extrabold bg-[#027046]/10 px-2 py-0.5 rounded-full';
             }
         }
 
@@ -533,13 +534,13 @@
             if (tab === 'student') {
                 vStudent.classList.remove('hidden');
                 vTeacher.classList.add('hidden');
-                btnStudent.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
-                btnTeacher.className = "px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
+                btnStudent.className = "px-3 py-1.5 rounded-lg bg-[#027046] text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
+                btnTeacher.className = "px-3 py-1.5 rounded-lg text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
             } else {
                 vStudent.classList.add('hidden');
                 vTeacher.classList.remove('hidden');
-                btnTeacher.className = "px-3 py-1.5 rounded-lg bg-white text-indigo-900 font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
-                btnStudent.className = "px-3 py-1.5 rounded-lg text-indigo-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
+                btnTeacher.className = "px-3 py-1.5 rounded-lg bg-[#027046] text-white font-bold text-xs sm:text-sm shadow-sm transition-all duration-200 flex items-center gap-1";
+                btnStudent.className = "px-3 py-1.5 rounded-lg text-slate-200 hover:text-white font-semibold text-xs sm:text-sm transition-all duration-200 flex items-center gap-1";
             }
         }
 
@@ -651,12 +652,12 @@
             buttons.forEach(btn => {
                 const isLong = btn.textContent.length >= 4;
                 const fontClass = isLong ? 'text-[10px] sm:text-xs px-0.5 whitespace-nowrap' : 'text-xs sm:text-sm px-1 sm:px-2';
-                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center shadow-sm active:scale-95`;
+                btn.className = `class-select-btn py-2.5 ${fontClass} font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-[#313339] hover:border-[#027046] hover:bg-[#027046]/10 transition-all text-center shadow-sm active:scale-95`;
             });
             const notice = document.getElementById('txtSelectedClassNotice');
             if (notice) {
                 notice.textContent = '학급 버튼을 선택하세요';
-                notice.className = 'text-[11px] text-indigo-600 font-semibold';
+                notice.className = 'text-[11px] text-[#027046] font-semibold';
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -722,10 +723,10 @@
             if (!cTotal || !cComp || !cIncomp) return;
 
             cTotal.className = "bg-white p-3 sm:p-4 rounded-2xl shadow-sm border-2 transition-all duration-150 active:scale-[0.98] cursor-pointer text-center " +
-                (currentSummaryFilter === 'all' ? "border-indigo-600 ring-4 ring-indigo-100 font-bold shadow-md bg-indigo-50/30" : "border-slate-200 hover:border-indigo-300");
+                (currentSummaryFilter === 'all' ? "border-[#05014A] ring-4 ring-[#05014A]/10 font-bold shadow-md bg-[#05014A]/5 text-[#05014A]" : "border-slate-200 hover:border-[#05014A]/40");
 
-            cComp.className = "bg-emerald-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border-2 transition-all duration-150 active:scale-[0.98] cursor-pointer text-center " +
-                (currentSummaryFilter === 'complete' ? "border-emerald-600 ring-4 ring-emerald-100 font-bold shadow-md bg-emerald-100/60" : "border-emerald-200 hover:border-emerald-400");
+            cComp.className = "bg-[#027046]/5 p-3 sm:p-4 rounded-2xl shadow-sm border-2 transition-all duration-150 active:scale-[0.98] cursor-pointer text-center " +
+                (currentSummaryFilter === 'complete' ? "border-[#027046] ring-4 ring-[#027046]/20 font-bold shadow-md bg-[#027046]/10 text-[#027046]" : "border-[#027046]/30 hover:border-[#027046]");
 
             cIncomp.className = "bg-rose-50/80 p-3 sm:p-4 rounded-2xl shadow-sm border-2 transition-all duration-150 active:scale-[0.98] cursor-pointer text-center " +
                 (currentSummaryFilter === 'incomplete' ? "border-rose-600 ring-4 ring-rose-100 font-bold shadow-md bg-rose-100/60" : "border-rose-200 hover:border-rose-400");
@@ -778,7 +779,7 @@
                 if (el) {
                     if (col === currentSortCol) {
                         el.textContent = currentSortDir === 'asc' ? '▲' : '▼';
-                        el.className = 'text-indigo-600 font-bold ml-0.5';
+                        el.className = 'text-[#027046] font-bold ml-0.5';
                     } else {
                         el.textContent = '↕';
                         el.className = 'text-slate-400 font-normal ml-0.5';
@@ -807,14 +808,14 @@
             });
 
             displayData.forEach(item => {
-                const badgeClass = item.isComplete ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-rose-100 text-rose-800 border-rose-200';
+                const badgeClass = item.isComplete ? 'bg-[#027046]/10 text-[#027046] border-[#027046]/30' : 'bg-rose-100 text-rose-800 border-rose-200';
                 const statusText = item.isComplete ? '완료' : '미완료';
 
                 // 1. 데스크탑 테이블 행 (한 줄 표시: whitespace-nowrap & compact px-0.5~px-1.5)
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 border-b border-slate-100 text-center whitespace-nowrap";
                 tr.innerHTML = `
-                    <td class="px-1.5 py-2 font-semibold text-left text-slate-800 text-[11px] sm:text-xs whitespace-nowrap">${item.studentId} ${item.name}</td>
+                    <td class="px-1.5 py-2 font-semibold text-left text-[#313339] text-[11px] sm:text-xs whitespace-nowrap">${item.studentId} ${item.name}</td>
                     <td class="px-1 py-2 whitespace-nowrap"><span class="inline-block px-1.5 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold border whitespace-nowrap ${badgeClass}">${statusText}</span></td>
                     <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q1)}</td>
                     <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q2)}</td>
@@ -825,7 +826,7 @@
                     <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q7)}</td>
                     <td class="px-0.5 sm:px-1 py-2 whitespace-nowrap">${renderStatusCell(item.status.q8)}</td>
                     <td class="px-1 py-2 whitespace-nowrap">
-                        <button onclick="openEditStudent('${item.studentId}')" class="text-[11px] font-bold text-indigo-600 hover:underline px-1.5 py-0.5 bg-indigo-50 rounded whitespace-nowrap">수정</button>
+                        <button onclick="openEditStudent('${item.studentId}')" class="text-[11px] font-bold text-[#027046] hover:underline px-1.5 py-0.5 bg-[#027046]/10 rounded whitespace-nowrap">수정</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -843,7 +844,7 @@
                 qLabels.forEach((label, idx) => {
                     const isSubmitted = qStatusList[idx] === '제출';
                     const chipStyle = isSubmitted 
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                        ? 'bg-[#027046]/10 text-[#027046] border-[#027046]/30' 
                         : 'bg-rose-50 text-rose-700 border-rose-200 font-bold';
                     const icon = isSubmitted ? '✓' : '✕';
                     chipsHtml += `
@@ -857,12 +858,12 @@
                 card.innerHTML = `
                     <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
                         <div>
-                            <span class="font-extrabold text-slate-900 text-sm font-outfit">${item.studentId}</span>
-                            <span class="font-bold text-slate-800 text-sm ml-1">${item.name}</span>
+                            <span class="font-extrabold text-[#313339] text-sm font-outfit">${item.studentId}</span>
+                            <span class="font-bold text-[#313339] text-sm ml-1">${item.name}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold border ${badgeClass}">${statusText}</span>
-                            <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">수정</button>
+                            <button onclick="openEditStudent('${item.studentId}')" class="text-xs font-bold text-[#027046] bg-[#027046]/10 px-2.5 py-1 rounded-lg border border-[#027046]/20">수정</button>
                         </div>
                     </div>
                     ${item.status.timestamp ? `<p class="text-[10px] text-slate-400 font-outfit">최종 답변시각: ${item.status.timestamp}</p>` : ''}
@@ -880,7 +881,7 @@
 
         function renderStatusCell(val) {
             return val === '제출'
-                ? `<span class="text-emerald-600 font-extrabold">O</span>`
+                ? `<span class="text-[#027046] font-extrabold">O</span>`
                 : `<span class="text-rose-500 font-bold">X</span>`;
         }
 
