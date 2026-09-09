@@ -294,14 +294,19 @@
                 <div class="text-center space-y-1">
                     <span class="text-3xl">🔐</span>
                     <h2 class="text-lg font-bold text-slate-900">교사 인증 대시보드</h2>
-                    <p class="text-xs text-slate-500">담당 학급을 선택 후 비밀번호를 입력해 주세요.</p>
+                    <p class="text-xs text-slate-500">담당 학급 버튼을 선택 후 비밀번호를 입력해 주세요.</p>
                 </div>
-                <div class="space-y-3">
+                <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">학급 선택</label>
-                        <select id="selectTeacherClass" class="w-full border-2 border-slate-200 rounded-xl px-3.5 py-3 text-sm font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none bg-slate-50">
-                            <option value="">학급 선택...</option>
-                        </select>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-bold text-slate-700">학급 선택 (2x5 배열)</label>
+                            <span id="txtSelectedClassNotice" class="text-[11px] text-indigo-600 font-semibold">학급 버튼을 선택하세요</span>
+                        </div>
+                        <input type="hidden" id="selectTeacherClass" value="">
+                        <!-- 2x5 배열 학급 선택 버튼 그리드 -->
+                        <div id="teacherClassBtnGrid" class="grid grid-cols-5 gap-1.5 sm:gap-2">
+                            <!-- JS 동적 생성 -->
+                        </div>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">비밀번호</label>
@@ -446,16 +451,42 @@
             }).getStudentList();
 
             google.script.run.withSuccessHandler(function (teachers) {
-                const select = document.getElementById('selectTeacherClass');
-                select.innerHTML = '<option value="">학급 선택...</option>';
+                const grid = document.getElementById('teacherClassBtnGrid');
+                if (!grid) return;
+                grid.innerHTML = '';
                 (teachers || []).forEach(t => {
-                    const opt = document.createElement('option');
-                    opt.value = t.className;
-                    opt.textContent = `${t.className} (${t.name} 선생님)`;
-                    select.appendChild(opt);
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'class-select-btn py-2.5 px-1 sm:px-2 text-xs sm:text-sm font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center truncate shadow-sm active:scale-95';
+                    btn.dataset.value = t.className;
+
+                    let label = t.className;
+                    if (t.className === '0' || t.className === '관리자') {
+                        label = '0(관리자)';
+                    }
+                    btn.textContent = label;
+                    btn.onclick = function () { selectTeacherClassBtn(t.className, btn); };
+                    grid.appendChild(btn);
                 });
             }).getTeacherList();
         };
+
+        // 학급 선택 버튼 선택 처리
+        function selectTeacherClassBtn(val, selectedBtn) {
+            document.getElementById('selectTeacherClass').value = val;
+            const buttons = document.querySelectorAll('.class-select-btn');
+            buttons.forEach(btn => {
+                btn.className = 'class-select-btn py-2.5 px-1 sm:px-2 text-xs sm:text-sm font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center truncate shadow-sm active:scale-95';
+            });
+            selectedBtn.className = 'class-select-btn py-2.5 px-1 sm:px-2 text-xs sm:text-sm font-black rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white shadow-md transition-all text-center truncate scale-[1.02] ring-2 ring-indigo-200';
+
+            const notice = document.getElementById('txtSelectedClassNotice');
+            if (notice) {
+                const labelStr = (val === '0' || val === '관리자') ? '0 (관리자)' : val;
+                notice.textContent = `선택: ${labelStr}`;
+                notice.className = 'text-[11px] text-indigo-700 font-extrabold bg-indigo-100 px-2 py-0.5 rounded-full';
+            }
+        }
 
         // 탭 전환
         function switchTab(tab) {
@@ -580,6 +611,16 @@
             document.getElementById('teacherDashboard').classList.add('hidden');
             document.getElementById('teacherLoginBox').classList.remove('hidden');
             document.getElementById('inputTeacherPw').value = '';
+            document.getElementById('selectTeacherClass').value = '';
+            const buttons = document.querySelectorAll('.class-select-btn');
+            buttons.forEach(btn => {
+                btn.className = 'class-select-btn py-2.5 px-1 sm:px-2 text-xs sm:text-sm font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50/60 transition-all text-center truncate shadow-sm active:scale-95';
+            });
+            const notice = document.getElementById('txtSelectedClassNotice');
+            if (notice) {
+                notice.textContent = '학급 버튼을 선택하세요';
+                notice.className = 'text-[11px] text-indigo-600 font-semibold';
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
