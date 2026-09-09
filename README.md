@@ -160,3 +160,8 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
 
 
 
+
+
+## [2026-09-09] 업데이트 이력 (Commit ID: 33ad3fc)
+- **수정 내용**: 에이전트 실행 규칙(.agents/rules/rules.md) 및 README 자동 문서화·Git 커밋/푸시 스킬(.agents/skills/git-commit/SKILL.md) 동기화 및 프로젝트 적용
+- **검증 결과**: 에이전트 실행 규칙 수립, README 누적 업데이트 이력 동기화 및 Git repository 커밋/푸시 검증 완료
