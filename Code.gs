@@ -54,7 +54,61 @@ function getStudentList() {
   return list;
 }
 
-// 2. 학생 제출 처리 (등록 또는 수정)
+// 2. 제출현황 시트 헤더 검사 및 자동 보정/열 추가 (8.개인정보 삭제 및 9.점검표)
+function ensureSheetHeaders(sheet) {
+  const lastRow = sheet.getLastRow();
+  const targetHeaders = [
+    '순번', '학년', '반', '번호', '학번', '이름', '답변 시간',
+    '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.개인정보 삭제', '9.점검표'
+  ];
+
+  if (lastRow === 0) {
+    sheet.appendRow(targetHeaders);
+    return;
+  }
+
+  let headerValues = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0];
+
+  // 1. '답변 시간' 열(7번째 열) 자동 보정
+  if (headerValues.length < 7 || String(headerValues[6]).trim() !== '답변 시간') {
+    sheet.insertColumnBefore(7);
+    sheet.getRange(1, 7).setValue('답변 시간');
+    headerValues = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  }
+
+  // 2. '8.개인정보 삭제' 열 추가 및 '9.점검표' 열 보정
+  const colNames = headerValues.map(h => String(h).trim());
+  const hasPrivacyCol = colNames.some(h => h.includes('개인정보') || h.includes('개인 데이터') || h.includes('개인데이터'));
+
+  if (!hasPrivacyCol) {
+    let insertColIndex = 15;
+    const checklistIdx = colNames.findIndex(h => h.includes('점검표'));
+    if (checklistIdx !== -1) {
+      insertColIndex = checklistIdx + 1; // 1-based index
+    }
+    sheet.insertColumnBefore(insertColIndex);
+    sheet.getRange(1, insertColIndex).setValue('8.개인정보 삭제');
+    if (insertColIndex + 1 <= sheet.getLastColumn()) {
+      sheet.getRange(1, insertColIndex + 1).setValue('9.점검표');
+    }
+    if (sheet.getLastRow() > 1) {
+      const numRows = sheet.getLastRow() - 1;
+      const defaultZeros = Array(numRows).fill([0]);
+      sheet.getRange(2, insertColIndex, numRows, 1).setValues(defaultZeros);
+    }
+  } else {
+    for (let c = 1; c <= headerValues.length; c++) {
+      const val = String(headerValues[c - 1]).trim();
+      if (val.includes('개인정보') || val.includes('개인 데이터') || val.includes('개인데이터')) {
+        sheet.getRange(1, c).setValue('8.개인정보 삭제');
+      } else if (val.includes('점검표')) {
+        sheet.getRange(1, c).setValue('9.점검표');
+      }
+    }
+  }
+}
+
+// 2-1. 학생 제출 처리 (등록 또는 수정)
 function submitStudentData(formData) {
   const ss = getSpreadsheet();
   let sheet = ss.getSheetByName('제출현황');
@@ -63,21 +117,8 @@ function submitStudentData(formData) {
     sheet = ss.insertSheet('제출현황');
   }
 
+  ensureSheetHeaders(sheet);
   let data = sheet.getDataRange().getValues();
-
-  // 헤더 검사 및 '답변 시간' 열(7번째 열) 자동 보정
-  if (data.length === 0 || (data.length > 0 && data[0].length === 0)) {
-    const headers = [
-      '순번', '학년', '반', '번호', '학번', '이름', '답변 시간',
-      '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.점검표'
-    ];
-    sheet.appendRow(headers);
-    data = sheet.getDataRange().getValues();
-  } else if (data[0].length < 15 || String(data[0][6]).trim() !== '답변 시간') {
-    sheet.insertColumnBefore(7);
-    sheet.getRange(1, 7).setValue('답변 시간');
-    data = sheet.getDataRange().getValues();
-  }
 
   const studentId = String(formData.studentId);
   let targetRowIndex = -1;
@@ -92,8 +133,14 @@ function submitStudentData(formData) {
   const now = new Date();
   const timestamp = Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss');
 
-  const qKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
-  const qValues = qKeys.map(k => (formData[k] === '제출' ? 1 : 0));
+  const qKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9'];
+  const qValues = qKeys.map(k => {
+    const v = formData[k];
+    if (k === 'q8') {
+      return (v === '삭제' || v === '제출' || v === 1 || String(v) === '1') ? 1 : 0;
+    }
+    return (v === '제출' || v === 1 || String(v) === '1') ? 1 : 0;
+  });
   const qColors = qKeys.map(() => '#ffffff');
 
   const rowValues = [
@@ -109,11 +156,11 @@ function submitStudentData(formData) {
 
   if (targetRowIndex > 0) {
     sheet.getRange(targetRowIndex, 1, 1, rowValues.length).setValues([rowValues]);
-    sheet.getRange(targetRowIndex, 8, 1, 8).setBackgrounds([qColors]);
+    sheet.getRange(targetRowIndex, 8, 1, qKeys.length).setBackgrounds([qColors]);
   } else {
     sheet.appendRow(rowValues);
     const newRowIndex = sheet.getLastRow();
-    sheet.getRange(newRowIndex, 8, 1, 8).setBackgrounds([qColors]);
+    sheet.getRange(newRowIndex, 8, 1, qKeys.length).setBackgrounds([qColors]);
   }
 
   return { success: true, name: formData.name, studentId: formData.studentId, timestamp: timestamp };
@@ -230,6 +277,9 @@ function getTeacherDashboardData(selectedClass) {
 
   const ss = getSpreadsheet();
   const statusSheet = ss.getSheetByName('제출현황');
+  if (statusSheet && statusSheet.getLastRow() > 0) {
+    ensureSheetHeaders(statusSheet);
+  }
   const statusData = statusSheet ? statusSheet.getDataRange().getValues().slice(1) : [];
 
   const statusMap = {};
@@ -238,11 +288,13 @@ function getTeacherDashboardData(selectedClass) {
     const sId = String(row[4]).trim();
     if (!sId) continue;
 
-    const hasTimestampCol = row.length >= 15 || String(row[6]).includes('-') || String(row[6]).includes(':');
+    const hasTimestampCol = row.length >= 16 || String(row[6]).includes('-') || String(row[6]).includes(':');
     const offset = hasTimestampCol ? 1 : 0;
 
     const q1 = row[6 + offset], q2 = row[7 + offset], q3 = row[8 + offset], q4 = row[9 + offset];
-    const q5 = row[10 + offset], q6 = row[11 + offset], q7 = row[12 + offset], q8 = row[13 + offset];
+    const q5 = row[10 + offset], q6 = row[11 + offset], q7 = row[12 + offset];
+    const q8 = row[13 + offset];
+    const q9 = row[14 + offset];
 
     statusMap[sId] = {
       timestamp: hasTimestampCol && row[6] ? String(row[6]) : '',
@@ -253,7 +305,8 @@ function getTeacherDashboardData(selectedClass) {
       q5: (q5 === 1 || String(q5) === '1' || q5 === '제출') ? '제출' : '미제출',
       q6: (q6 === 1 || String(q6) === '1' || q6 === '제출') ? '제출' : '미제출',
       q7: (q7 === 1 || String(q7) === '1' || q7 === '제출') ? '제출' : '미제출',
-      q8: (q8 === 1 || String(q8) === '1' || q8 === '제출') ? '제출' : '미제출'
+      q8: (q8 === 1 || String(q8) === '1' || q8 === '삭제' || q8 === '제출') ? '삭제' : '미삭제',
+      q9: (q9 === 1 || String(q9) === '1' || q9 === '제출') ? '제출' : '미제출'
     };
   }
 
@@ -261,7 +314,7 @@ function getTeacherDashboardData(selectedClass) {
   const defaultStatus = {
     timestamp: '',
     q1: '미제출', q2: '미제출', q3: '미제출', q4: '미제출',
-    q5: '미제출', q6: '미제출', q7: '미제출', q8: '미제출'
+    q5: '미제출', q6: '미제출', q7: '미제출', q8: '미삭제', q9: '미제출'
   };
 
   for (let i = 0; i < studentList.length; i++) {
@@ -275,7 +328,9 @@ function getTeacherDashboardData(selectedClass) {
     const st = statusMap[student.studentId] || defaultStatus;
     const isAllComplete = (
       st.q1 === '제출' && st.q2 === '제출' && st.q3 === '제출' && st.q4 === '제출' &&
-      st.q5 === '제출' && st.q6 === '제출' && st.q7 === '제출' && st.q8 === '제출'
+      st.q5 === '제출' && st.q6 === '제출' && st.q7 === '제출' &&
+      (st.q8 === '삭제' || st.q8 === '제출') &&
+      st.q9 === '제출'
     );
 
     resultList.push({
