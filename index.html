@@ -1002,12 +1002,27 @@
                 return;
             }
 
+            // 서울 기준 시각 (Asia/Seoul, KST) 포맷팅
+            const seoulFormatter = new Intl.DateTimeFormat('ko-KR', {
+                timeZone: 'Asia/Seoul',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hourCycle: 'h23'
+            });
+            const map = {};
+            seoulFormatter.formatToParts(new Date()).forEach(p => map[p.type] = p.value);
+            const seoulTimeStr = `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}`;
+
             const qLabels = {
                 q1: '1.기기', q2: '2.큰박스', q3: '3.어댑터', q4: '4.케이블',
                 q5: '5.펜', q6: '6.홀더', q7: '7.작은박스', q8: '8.개인정보 삭제', q9: '9.점검표'
             };
 
             let text = `[디벗 미제출/미완료 명단 - 총 ${incompleteList.length}명]\n`;
+            text += `- 기준 일시: ${seoulTimeStr} (서울 기준)\n\n`;
             incompleteList.forEach(s => {
                 const unsubmittedItems = [];
                 Object.keys(qLabels).forEach(key => {
@@ -1021,7 +1036,7 @@
             });
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('미제출자 명단이 미제출 항목 정보와 함께 클립보드에 복사되었습니다. 학급 안내 메시지 등에 붙여넣어 활용하세요.');
+                alert('미제출자 명단이 서울 기준 일시와 함께 클립보드에 복사되었습니다. 학급 안내 메시지 등에 붙여넣어 활용하세요.');
             }).catch(() => {
                 alert('명단 복사에 실패했습니다. 수동으로 복사해 주세요.\n\n' + text);
             });
