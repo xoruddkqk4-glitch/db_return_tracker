@@ -21,6 +21,7 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
 - 담임교사 비밀번호 인증 로그인
 - 학급별 학생들의 9개 항목 제출 현황 실시간 조회 및 모니터링
 - 전 항목 제출 완료(양품화 완료) 여부 자동 판별 및 통계 확인
+- 미제출자 명단 원클릭 복사 시 서울 기준 일시(YYYY-MM-DD HH:mm KST) 및 미제출 세부 항목 자동 포함
 
 ### 3. Google Spreadsheet 백엔드 연동
 - `학생명단`: 학년, 반, 번호, 학번, 이름 데이터 관리
@@ -197,5 +198,9 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
      - `.antigravity/rules.md`: rules 동기화
 - **검증 결과**: Apps Script 문법 검사 및 구문 검증 완료, 스프레드시트 16열 자동 헤더 보정 로직 검증 완료, 9문항 체크리스트 UI/대시보드 호환성 검증 완료
 
-
-
+## [2026-09-15 15:46] 업데이트 이력 (Commit ID: 9499b2f)
+- **수정 내용**: 교사용 대시보드 미제출자 명단 원클릭 복사 시 **서울 기준 일시(Asia/Seoul, KST)** 자동 포함 기능 추가 ([index.html](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/index.html))
+  1. `Intl.DateTimeFormat`의 `timeZone: 'Asia/Seoul'` 및 `hourCycle: 'h23'`을 적용하여 교사 기기의 OS/브라우저 타임존과 무관하게 한국 표준시(`YYYY-MM-DD HH:mm`) 타임스탬프 생성
+  2. 클립보드 복사 텍스트 헤더에 `- 기준 일시: YYYY-MM-DD HH:mm (서울 기준)` 자동 삽입
+  3. 클립보드 복사 완료 알림(`alert`) 안내 문구 개선
+- **검증 결과**: Node.js 기반 `index.html` 인라인 스크립트 구문 검사(`Syntax OK`) 및 `Intl.DateTimeFormat` 서울 타임존 변환 정확도 검증 완료
