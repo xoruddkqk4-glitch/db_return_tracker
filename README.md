@@ -204,3 +204,16 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
   2. 클립보드 복사 텍스트 헤더에 `- 기준 일시: YYYY-MM-DD HH:mm (서울 기준)` 자동 삽입
   3. 클립보드 복사 완료 알림(`alert`) 안내 문구 개선
 - **검증 결과**: Node.js 기반 `index.html` 인라인 스크립트 구문 검사(`Syntax OK`) 및 `Intl.DateTimeFormat` 서울 타임존 변환 정확도 검증 완료
+
+## [2026-09-29 13:48] 업데이트 이력 (Commit ID: c6a848a)
+- **수정 내용**: 교사용 대시보드 UI/UX 사용성 개선, 정렬 오류 수정, 업무담당자 전용 학급 다중 필터 및 키보드 편의 기능 추가 ([index.html](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/index.html))
+  1. 테이블 열이름 행(Header) 고정 및 세로 스크롤: 데스크탑/태블릿 테이블 래퍼에 `overflow-y-auto max-h-[60vh] sm:max-h-[620px]` 및 `<thead>`에 `sticky top-0 z-10 bg-slate-100 shadow-sm border-b border-slate-200`을 적용하여 학생 목록 스크롤 시에도 헤더가 상단에 완벽히 고정되도록 구현
+  2. '8. 개인정보 삭제' 열 정렬 오류 수정: `q8` 데이터의 '삭제'/'미삭제' 상태값을 포함하도록 `(val === '제출' || val === '삭제')` 판별식을 일원화하여 O/X 기준 오름차순/내림차순 정렬 기능 정상화
+  3. 교사 비밀번호 `Enter` 키 로그인 연동: 비밀번호 입력창에 `onkeyup="if(event.key === 'Enter') handleTeacherLogin()"` 이벤트 핸들러를 추가하여 마우스 클릭 없이 키보드 Enter 입력만으로 즉시 대시보드 접속 가능
+  4. 업무담당자 전용 학급 다중 선택(전체, 1~9반) 필터 기능 추가:
+     - '업무담당자' 로그인 시에만 상단에 학급 다중 필터 바 표시
+     - `전체` 버튼 가로 길이를 2배(`flex: 2`), `1반`~`9반` 버튼을 동일한 너비(`flex: 1`)로 균등 확장하여 단일 행에 균일한 간격으로 정렬
+     - 원하는 학급들을 자유롭게 중복 선택(토글)하여 실시간 필터링
+     - 상단 요약 카드(전체/완료/미완료 인원수) 및 '미제출자 명단 복사' 기능도 선택된 학급들 기준으로 즉시 자동 계산/복사 연동
+  5. 에이전트 실행 규칙 및 스킬 최적화: `.agents/rules/rules.md` 및 `.antigravity/rules.md` 최신 동기화, `/apply` 스킬 추가 및 `/ask` 연계 강화
+- **검증 결과**: Node.js 기반 `index.html` 인라인 스크립트 구문 문법 검사(`inline script syntax: OK`) 및 `Code.gs` 구문 검사(`Code.gs syntax: OK`) 통과, 테이블 헤더 고정 및 단일 행 버튼 비율 배치 검증 완료
