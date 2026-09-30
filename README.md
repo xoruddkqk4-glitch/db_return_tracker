@@ -217,3 +217,21 @@ Google Apps Script 기반의 디벗(학생용 스마트기기) 양품화 및 반
      - 상단 요약 카드(전체/완료/미완료 인원수) 및 '미제출자 명단 복사' 기능도 선택된 학급들 기준으로 즉시 자동 계산/복사 연동
   5. 에이전트 실행 규칙 및 스킬 최적화: `.agents/rules/rules.md` 및 `.antigravity/rules.md` 최신 동기화, `/apply` 스킬 추가 및 `/ask` 연계 강화
 - **검증 결과**: Node.js 기반 `index.html` 인라인 스크립트 구문 문법 검사(`inline script syntax: OK`) 및 `Code.gs` 구문 검사(`Code.gs syntax: OK`) 통과, 테이블 헤더 고정 및 단일 행 버튼 비율 배치 검증 완료
+
+## [2026-10-01 08:39] 업데이트 이력 (Commit ID: 5e154bb)
+- **수정 내용**: 교사용 대시보드 열 이름 직관화 및 A4 규격 PDF 다운로드(학급별/업무담당자별) 신설 및 렌더링 최적화 ([Code.gs](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/Code.gs), [index.html](file:///c:/Users/user/Desktop/appsscript/22-디벗%20양품화%20제출%20현황/index.html))
+  1. 테이블 열 이름 직관화 & 한 줄 표시:
+     - 기존 명칭 수정: `2.큰박스` ➔ `2.가방`, `3.어댑터` ➔ `3.충전기`, `4.케이블` ➔ `4.충전선`, `7.작은박스` ➔ `7.지퍼백`
+     - '8.개인정보 삭제' 열 헤더 줄바꿈 방지(`whitespace-nowrap`) 적용
+     - `Code.gs`(`ensureSheetHeaders`) 및 `index.html`(`qLabels`, 미제출자 명단 복사 텍스트) 동기화
+  2. A4 1페이지 규격 실시간 PDF 다운로드 기능 구현:
+     - `html2canvas` (v1.4.1) 및 `jspdf` (v2.5.1) 라이브러리 연동
+     - **담임교사 모드**: 담당 학급 학생 전체 명단을 A4 1페이지 규격으로 맞춤 생성하여 다운로드
+     - **업무담당자 모드**: 선택된 학급(또는 전체 학급)을 **학급당 A4 1페이지씩 자동 분할**하여 다중 페이지 단일 PDF로 일괄 다운로드
+     - 렌더링 진행률 안내 모달(`pdfLoadingModal`) 및 다운로드 버튼 인터랙션 제공
+  3. PDF 출력 서식 및 디자인 최적화:
+     - 파일명에 한국 표준시(KST) 저장 날짜 및 시간 정보(`YYYYMMDD_HHmm`) 자동 포함 (`getSeoulDateTimeFileStr`)
+     - 상단 여백(`padding-top: 56px`) 확보 및 하단 담임교사 서명란 제거
+     - 상단 헤더 학급 정보 대형 강조 (`[3학년 1반]` 18px Ultra Bold 전면 배치)
+     - `html2canvas` 폰트 베이스라인 계산 오류로 인한 텍스트 박스 하단 쏠림/이탈 버그 원천 해결 (고정 높이/line-height 제거, 균등 패딩 기반 안착, `document.fonts.ready` 대기 추가)
+- **검증 결과**: Node.js 기반 `Code.gs` 및 `index.html` 구문 문법 검사(`Syntax OK`) 통과, 학급별/업무담당자별 A4 레이아웃 및 파일명 타임스탬프 형식 검증 완료

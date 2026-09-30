@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -387,9 +389,14 @@
                         </div>
                     </div>
                     
-                    <button onclick="copyUnsubmittedList()" class="w-full bg-[#05014A] hover:bg-[#05014A]/90 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
-                        <span>📋</span> <span>미제출자 명단 (미제출 항목 포함) 원클릭 복사</span>
-                    </button>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button onclick="copyUnsubmittedList()" class="w-full bg-[#05014A] hover:bg-[#05014A]/90 active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 px-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
+                            <span>📋</span> <span>미제출자 명단 원클릭 복사</span>
+                        </button>
+                        <button id="btnPdfDownload" onclick="downloadDashboardPdf()" class="w-full bg-[#027046] hover:bg-[#015837] active:scale-[0.99] text-white text-xs sm:text-sm font-bold py-3 px-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
+                            <span id="iconPdf">📄</span> <span id="txtPdfBtn">PDF 다운로드 (A4 1페이지)</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 업무담당자 전용: 학급 다중 선택 필터 바 -->
@@ -452,13 +459,13 @@
                                         1.기기 <span id="sort-q1">↕</span>
                                     </th>
                                     <th onclick="handleSort('q2')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
-                                        2.큰박스 <span id="sort-q2">↕</span>
+                                        2.가방 <span id="sort-q2">↕</span>
                                     </th>
                                     <th onclick="handleSort('q3')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
-                                        3.어댑터 <span id="sort-q3">↕</span>
+                                        3.충전기 <span id="sort-q3">↕</span>
                                     </th>
                                     <th onclick="handleSort('q4')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
-                                        4.케이블 <span id="sort-q4">↕</span>
+                                        4.충전선 <span id="sort-q4">↕</span>
                                     </th>
                                     <th onclick="handleSort('q5')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         5.펜 <span id="sort-q5">↕</span>
@@ -467,11 +474,10 @@
                                         6.홀더 <span id="sort-q6">↕</span>
                                     </th>
                                     <th onclick="handleSort('q7')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
-                                        7.작은박스 <span id="sort-q7">↕</span>
+                                        7.지퍼백 <span id="sort-q7">↕</span>
                                     </th>
-                                    <th onclick="handleSort('q8')" class="px-0.5 py-1 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-normal leading-tight">
-                                        <span class="block text-[10px] sm:text-[11px]">8.개인정보</span>
-                                        <span class="block text-[9px] sm:text-[10px] text-slate-600">삭제 <span id="sort-q8">↕</span></span>
+                                    <th onclick="handleSort('q8')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
+                                        8.개인정보 삭제 <span id="sort-q8">↕</span>
                                     </th>
                                     <th onclick="handleSort('q9')" class="px-0.5 py-2 text-center cursor-pointer hover:bg-slate-200/70 transition-colors whitespace-nowrap">
                                         9.점검표 <span id="sort-q9">↕</span>
@@ -509,6 +515,18 @@
             <p class="text-xs text-slate-500 leading-relaxed px-1">다시 입력하면 마지막 제출 현황이 기록됩니다.</p>
             <button onclick="closeModal()"
                 class="w-full bg-[#027046] hover:bg-[#015837] active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-sm shadow-md transition-all">확인</button>
+        </div>
+    </div>
+
+    <!-- PDF 생성 진행 모달 -->
+    <div id="pdfLoadingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center space-y-4 shadow-2xl border border-slate-100 transform transition-all animate-in fade-in zoom-in duration-150">
+            <div class="w-12 h-12 border-4 border-[#027046] border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div class="space-y-1">
+                <h3 class="text-base font-bold text-[#313339]">A4 PDF 문서 생성 중</h3>
+                <p id="pdfProgressText" class="text-xs text-slate-500 font-medium">페이지를 렌더링하고 있습니다...</p>
+            </div>
+            <p class="text-[11px] text-slate-400">잠시만 기다려 주시면 다운로드가 시작됩니다.</p>
         </div>
     </div>
 
@@ -813,6 +831,10 @@
             document.getElementById('teacherLoginBox').classList.add('hidden');
             document.getElementById('teacherDashboard').classList.remove('hidden');
             document.getElementById('txtDashboardTitle').textContent = title;
+            const badge = document.getElementById('txtTeacherBadge');
+            if (badge) {
+                badge.textContent = isAdminTeacherMode() ? '업무담당자 모드' : '담임교사 모드';
+            }
             selectedAdminClasses.clear();
             const adminFilterSec = document.getElementById('adminClassFilterSection');
             if (adminFilterSec) {
@@ -822,6 +844,7 @@
                     adminFilterSec.classList.add('hidden');
                 }
             }
+            updatePdfButtonLabel();
             loadDashboardData();
         }
 
@@ -833,6 +856,7 @@
                 if (isAdminTeacherMode()) {
                     renderAdminClassFilterButtons();
                 }
+                updatePdfButtonLabel();
                 sortAndRenderDashboard();
             }).getTeacherDashboardData(currentTeacherClass);
         }
@@ -924,6 +948,7 @@
                     badge.className = 'text-[11px] font-bold text-[#027046] bg-[#027046]/10 px-2.5 py-0.5 rounded-full border border-[#027046]/20';
                 }
             }
+            updatePdfButtonLabel();
         }
 
         // 학급 버튼 토글 로직
@@ -1058,7 +1083,7 @@
             tbody.innerHTML = '';
             mobileCardList.innerHTML = '';
 
-            const qLabels = ['1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.개인정보 삭제', '9.점검표'];
+            const qLabels = ['1.기기', '2.가방', '3.충전기', '4.충전선', '5.펜', '6.홀더', '7.지퍼백', '8.개인정보 삭제', '9.점검표'];
 
             displayData.forEach(item => {
                 const badgeClass = item.isComplete ? 'bg-[#027046]/10 text-[#027046] border-[#027046]/30' : 'bg-rose-100 text-rose-800 border-rose-200';
@@ -1169,8 +1194,8 @@
             const seoulTimeStr = `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}`;
 
             const qLabels = {
-                q1: '1.기기', q2: '2.큰박스', q3: '3.어댑터', q4: '4.케이블',
-                q5: '5.펜', q6: '6.홀더', q7: '7.작은박스', q8: '8.개인정보 삭제', q9: '9.점검표'
+                q1: '1.기기', q2: '2.가방', q3: '3.충전기', q4: '4.충전선',
+                q5: '5.펜', q6: '6.홀더', q7: '7.지퍼백', q8: '8.개인정보 삭제', q9: '9.점검표'
             };
 
             let text = `[디벗 미제출/미완료 명단${filterDesc} - 총 ${incompleteList.length}명]\n`;
@@ -1220,6 +1245,349 @@
         function setRadioVal(name, val) {
             const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
             if (el) el.checked = true;
+        }
+
+        // ================= PDF 다운로드 (A4 1페이지 규격화) =================
+        function updatePdfButtonLabel() {
+            const btnText = document.getElementById('txtPdfBtn');
+            if (!btnText) return;
+
+            if (isAdminTeacherMode()) {
+                const classSet = new Set(['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+                (currentDashboardData || []).forEach(item => {
+                    const c = String(item.classNum || '').replace(/[^0-9]/g, '');
+                    if (c && c !== '0') classSet.add(c);
+                });
+                const totalClassCount = classSet.size;
+
+                if (selectedAdminClasses.size === 0 || selectedAdminClasses.size === totalClassCount) {
+                    btnText.textContent = '전체 학급 PDF 다운로드 (반별 A4 1페이지)';
+                } else {
+                    btnText.textContent = `선택 학급(${selectedAdminClasses.size}개 반) PDF 다운로드 (반별 A4 1페이지)`;
+                }
+            } else {
+                btnText.textContent = '학급 현황 PDF 다운로드 (A4 1페이지)';
+            }
+        }
+
+        function getSeoulTimestampStr() {
+            try {
+                const seoulFormatter = new Intl.DateTimeFormat('ko-KR', {
+                    timeZone: 'Asia/Seoul',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hourCycle: 'h23'
+                });
+                const map = {};
+                seoulFormatter.formatToParts(new Date()).forEach(p => map[p.type] = p.value);
+                return `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}`;
+            } catch (e) {
+                const d = new Date();
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+            }
+        }
+
+        function getSeoulDateTimeFileStr() {
+            try {
+                const seoulFormatter = new Intl.DateTimeFormat('ko-KR', {
+                    timeZone: 'Asia/Seoul',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                const map = {};
+                seoulFormatter.formatToParts(new Date()).forEach(p => map[p.type] = p.value);
+                return `${map.year}${map.month}${map.day}_${map.hour}${map.minute}`;
+            } catch (e) {
+                const d = new Date();
+                const pad = (n) => String(n).padStart(2, '0');
+                return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+            }
+        }
+
+        // 학급별 A4 1페이지 규격 HTML 렌더러 (인라인 스타일로 CSS 완벽 호환)
+        function generateClassPageHtml(className, grade, students, pageIndex, totalPages, timestampStr) {
+            const totalCount = students.length;
+            let completedCount = 0;
+            students.forEach(s => { if (s.isComplete) completedCount++; });
+            const incompleteCount = totalCount - completedCount;
+            const completeRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            // 학생 수에 따라 동적 높이 조절 (A4 세로 1123px 내부 정확히 피팅)
+            const targetRowHeight = Math.min(27, Math.max(19, Math.floor(840 / Math.max(totalCount, 1))));
+            const fontSize = targetRowHeight < 23 ? '9.5px' : (targetRowHeight < 25 ? '10px' : '11px');
+
+            let displayTitle = className;
+            if (grade && !displayTitle.includes('학년')) {
+                displayTitle = `${grade}학년 ${displayTitle}`;
+            }
+
+            let rowsHtml = '';
+            students.forEach((s, idx) => {
+                const bg = idx % 2 === 1 ? '#f8fafc' : '#ffffff';
+                const isComplete = s.isComplete;
+                const statusBadge = isComplete 
+                    ? `<span style="display:inline-block; padding:2px 7px; border-radius:4px; background:#dcfce7; color:#15803d; font-weight:700; font-size:10px; border:1px solid #bbf7d0; line-height:1.15; vertical-align:middle;">완료</span>`
+                    : `<span style="display:inline-block; padding:2px 7px; border-radius:4px; background:#fee2e2; color:#b91c1c; font-weight:700; font-size:10px; border:1px solid #fecaca; line-height:1.15; vertical-align:middle;">미완료</span>`;
+
+                const st = s.status || {};
+                const renderOX = (val) => {
+                    const ok = (val === '제출' || val === '삭제' || val === 1 || String(val) === '1');
+                    return ok 
+                        ? `<span style="display:inline-block; color:#027046; font-weight:800; font-size:11.5px; line-height:1.2; vertical-align:middle;">O</span>` 
+                        : `<span style="display:inline-block; color:#ef4444; font-weight:700; font-size:11px; line-height:1.2; vertical-align:middle;">X</span>`;
+                };
+
+                rowsHtml += `
+                    <tr style="background:${bg}; height:${targetRowHeight}px; border-bottom:1px solid #e2e8f0; font-size:${fontSize}; vertical-align:middle;">
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; font-weight:600; color:#334155; font-family:'Outfit',sans-serif; line-height:1.2; box-sizing:border-box;">${s.studentId}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; font-weight:700; color:#0f172a; line-height:1.2; box-sizing:border-box;">${s.name}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${statusBadge}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q1)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q2)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q3)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q4)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q5)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q6)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q7)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q8)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; box-sizing:border-box;">${renderOX(st.q9)}</td>
+                        <td style="height:${targetRowHeight}px; padding:1px 0; text-align:center; vertical-align:middle; color:#94a3b8; font-size:10px; box-sizing:border-box;"></td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <div class="a4-pdf-page" style="width:794px; height:1123px; box-sizing:border-box; background:#ffffff; color:#1e293b; padding:56px 28px 24px 28px; font-family:'Noto Sans KR',sans-serif; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
+                    <!-- 상단 헤더 -->
+                    <div>
+                        <!-- 헤더 1행: 타이틀(학급 정보 대형 강조) / 기준일시 -->
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:6px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:22px; line-height:1; vertical-align:middle;">📱</span>
+                                <span style="background:#05014A; color:#ffffff; font-size:18px; font-weight:900; display:inline-block; padding:3px 12px; border-radius:6px; line-height:1.2; letter-spacing:-0.3px; vertical-align:middle;">${displayTitle}</span>
+                                <h1 style="font-size:20px; font-weight:800; color:#05014A; margin:0; letter-spacing:-0.5px; line-height:1.2; display:inline-block; vertical-align:middle;">디벗 양품화 제출 현황표</h1>
+                            </div>
+                            <div style="font-size:10.5px; color:#64748b; line-height:1.2; padding-bottom:2px;">
+                                기준일시: <span style="font-weight:700; color:#334155;">${timestampStr} (KST)</span>
+                            </div>
+                        </div>
+
+                        <!-- 헤더 2행: 서브 설명 / 통계 요약 캡슐 -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <p style="font-size:10.5px; color:#64748b; margin:0; line-height:1.2; vertical-align:middle;">서울시교육청 디벗 반납 및 양품화 검수 관리</p>
+                            <div style="display:inline-block; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:4px 10px; font-size:11px; line-height:1.2; vertical-align:middle; box-sizing:border-box;">
+                                <span style="color:#475569; vertical-align:middle;">총원: <b style="color:#05014A; font-weight:800;">${totalCount}명</b></span>
+                                <span style="color:#cbd5e1; margin:0 6px; vertical-align:middle;">|</span>
+                                <span style="color:#475569; vertical-align:middle;">완료: <b style="color:#027046; font-weight:800;">${completedCount}명</b></span>
+                                <span style="color:#cbd5e1; margin:0 6px; vertical-align:middle;">|</span>
+                                <span style="color:#475569; vertical-align:middle;">미완료: <b style="color:#dc2626; font-weight:800;">${incompleteCount}명</b></span>
+                                <span style="color:#cbd5e1; margin:0 6px; vertical-align:middle;">|</span>
+                                <span style="color:#475569; vertical-align:middle;">완료율: <b style="color:#027046; font-weight:800;">${completeRate}%</b></span>
+                            </div>
+                        </div>
+
+                        <!-- 헤더 하단 독립 구분선 -->
+                        <div style="width:100%; height:2.5px; background-color:#05014A; margin-bottom:12px;"></div>
+
+                        <!-- 메인 테이블 -->
+                        <table style="width:100%; border-collapse:collapse; table-layout:fixed; border:1px solid #cbd5e1; font-size:11px;">
+                            <thead>
+                                <tr style="background:#f1f5f9; color:#0f172a; border-bottom:1.5px solid #94a3b8; font-weight:700; height:32px; vertical-align:middle;">
+                                    <th style="width:9.0%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">학번</th>
+                                    <th style="width:10.0%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">이름</th>
+                                    <th style="width:8.0%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">최종</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">1.기기</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">2.가방</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">3.충전기</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">4.충전선</th>
+                                    <th style="width:6.0%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">5.펜</th>
+                                    <th style="width:6.0%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">6.홀더</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">7.지퍼백</th>
+                                    <th style="width:12.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; white-space:nowrap; line-height:1.2; box-sizing:border-box;">8.개인정보 삭제</th>
+                                    <th style="width:6.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; border-right:1px solid #e2e8f0; line-height:1.2; box-sizing:border-box;">9.점검표</th>
+                                    <th style="width:8.5%; height:32px; padding:2px 0; text-align:center; vertical-align:middle; line-height:1.2; box-sizing:border-box;">확인</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 하단 푸터 (담임교사 서명란 제거) -->
+                    <div style="border-top:1px solid #e2e8f0; padding-top:8px; margin-top:6px; display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#64748b; line-height:1.2;">
+                        <div style="display:inline-block; vertical-align:middle;">* 본 문서는 디벗 양품화 제출 현황 시스템에서 실시간 출력된 서식입니다.</div>
+                        <div style="font-family:'Outfit',sans-serif; font-weight:700; color:#05014A; display:inline-block; vertical-align:middle;">
+                            페이지 ${pageIndex} / ${totalPages}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // PDF 다운로드 실행 함수 (학급당 A4 1페이지 분할)
+        async function downloadDashboardPdf() {
+            if (!currentDashboardData || currentDashboardData.length === 0) {
+                alert('다운로드할 현황 데이터가 없습니다.');
+                return;
+            }
+
+            if (!window.jspdf || !window.html2canvas) {
+                alert('PDF 생성 라이브러리가 로드되지 않았습니다. 인터넷 연결을 확인하거나 페이지를 새로고침해 주세요.');
+                return;
+            }
+
+            const modal = document.getElementById('pdfLoadingModal');
+            const progressText = document.getElementById('pdfProgressText');
+            const btn = document.getElementById('btnPdfDownload');
+
+            if (btn) btn.disabled = true;
+            if (modal) modal.classList.remove('hidden');
+
+            try {
+                const timestampStr = getSeoulTimestampStr();
+                const dateTimeFileStr = getSeoulDateTimeFileStr();
+
+                const classGroups = [];
+                if (isAdminTeacherMode()) {
+                    // 업무담당자 모드: 학급별로 학생 그룹핑
+                    const map = new Map();
+                    (currentDashboardData || []).forEach(item => {
+                        let c = String(item.classNum || '').replace(/[^0-9]/g, '');
+                        if (!c && item.studentId) {
+                            const sId = String(item.studentId).trim();
+                            if (sId.length === 5) c = String(parseInt(sId.substring(1, 3), 10));
+                            else if (sId.length === 4) c = String(parseInt(sId.substring(1, 2), 10));
+                        }
+                        if (!c) c = '1';
+                        if (!map.has(c)) map.set(c, []);
+                        map.get(c).push(item);
+                    });
+
+                    const classKeys = Array.from(map.keys()).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+                    const isAll = (selectedAdminClasses.size === 0 || selectedAdminClasses.size === classKeys.length);
+
+                    classKeys.forEach(cls => {
+                        if (isAll || selectedAdminClasses.has(cls)) {
+                            const students = map.get(cls) || [];
+                            students.sort((a, b) => (parseInt(a.studentId) || 0) - (parseInt(b.studentId) || 0));
+                            const grade = students[0] ? students[0].grade : '';
+                            classGroups.push({
+                                className: cls.endsWith('반') ? cls : `${cls}반`,
+                                grade: grade,
+                                students: students
+                            });
+                        }
+                    });
+                } else {
+                    // 담임교사 모드: 해당 학급만 1페이지 생성
+                    const students = [...(currentDashboardData || [])].sort((a, b) => (parseInt(a.studentId) || 0) - (parseInt(b.studentId) || 0));
+                    const grade = students[0] ? students[0].grade : '';
+                    let cName = currentTeacherClass || '학급';
+                    if (!cName.includes('반') && /^\d+$/.test(cName)) cName = `${cName}반`;
+                    classGroups.push({
+                        className: cName,
+                        grade: grade,
+                        students: students
+                    });
+                }
+
+                if (classGroups.length === 0) {
+                    alert('출력할 학급 데이터가 없습니다.');
+                    if (modal) modal.classList.add('hidden');
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+
+                // 임시 렌더링 컨테이너
+                const tempContainer = document.createElement('div');
+                tempContainer.id = 'tempPdfExportContainer';
+                tempContainer.style.cssText = 'position:fixed; top:0; left:0; width:794px; opacity:0; pointer-events:none; z-index:-999; overflow:hidden; background:#ffffff;';
+                document.body.appendChild(tempContainer);
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+
+                const totalPages = classGroups.length;
+
+                for (let i = 0; i < totalPages; i++) {
+                    const group = classGroups[i];
+                    if (progressText) {
+                        progressText.textContent = `A4 페이지 렌더링 중... (${group.className} - ${i + 1}/${totalPages}쪽)`;
+                    }
+
+                    tempContainer.innerHTML = generateClassPageHtml(
+                        group.className,
+                        group.grade,
+                        group.students,
+                        i + 1,
+                        totalPages,
+                        timestampStr
+                    );
+
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    const pageEl = tempContainer.querySelector('.a4-pdf-page');
+                    const canvas = await html2canvas(pageEl, {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        windowWidth: 794
+                    });
+
+                    if (i > 0) {
+                        pdf.addPage('a4', 'portrait');
+                    }
+
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                }
+
+                if (tempContainer.parentNode) {
+                    tempContainer.parentNode.removeChild(tempContainer);
+                }
+
+                let filename = '';
+                if (isAdminTeacherMode()) {
+                    if (selectedAdminClasses.size === 0) {
+                        filename = `[디벗현황] 전체학급_제출현황_${dateTimeFileStr}.pdf`;
+                    } else {
+                        filename = `[디벗현황] 선택학급(${selectedAdminClasses.size}개반)_제출현황_${dateTimeFileStr}.pdf`;
+                    }
+                } else {
+                    filename = `[디벗현황] ${classGroups[0].className}_제출현황_${dateTimeFileStr}.pdf`;
+                }
+
+                pdf.save(filename);
+
+            } catch (err) {
+                console.error('PDF 생성 오류:', err);
+                alert('PDF 생성 중 오류가 발생했습니다: ' + (err.message || err));
+            } finally {
+                const tempContainer = document.getElementById('tempPdfExportContainer');
+                if (tempContainer && tempContainer.parentNode) {
+                    tempContainer.parentNode.removeChild(tempContainer);
+                }
+                if (modal) modal.classList.add('hidden');
+                if (btn) btn.disabled = false;
+            }
         }
     </script>
 </body>

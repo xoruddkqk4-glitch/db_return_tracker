@@ -59,7 +59,7 @@ function ensureSheetHeaders(sheet) {
   const lastRow = sheet.getLastRow();
   const targetHeaders = [
     '순번', '학년', '반', '번호', '학번', '이름', '답변 시간',
-    '1.기기', '2.큰박스', '3.어댑터', '4.케이블', '5.펜', '6.홀더', '7.작은박스', '8.개인정보 삭제', '9.점검표'
+    '1.기기', '2.가방', '3.충전기', '4.충전선', '5.펜', '6.홀더', '7.지퍼백', '8.개인정보 삭제', '9.점검표'
   ];
 
   if (lastRow === 0) {
@@ -99,7 +99,15 @@ function ensureSheetHeaders(sheet) {
   } else {
     for (let c = 1; c <= headerValues.length; c++) {
       const val = String(headerValues[c - 1]).trim();
-      if (val.includes('개인정보') || val.includes('개인 데이터') || val.includes('개인데이터')) {
+      if (val.includes('큰박스')) {
+        sheet.getRange(1, c).setValue('2.가방');
+      } else if (val.includes('어댑터')) {
+        sheet.getRange(1, c).setValue('3.충전기');
+      } else if (val.includes('케이블')) {
+        sheet.getRange(1, c).setValue('4.충전선');
+      } else if (val.includes('작은박스')) {
+        sheet.getRange(1, c).setValue('7.지퍼백');
+      } else if (val.includes('개인정보') || val.includes('개인 데이터') || val.includes('개인데이터')) {
         sheet.getRange(1, c).setValue('8.개인정보 삭제');
       } else if (val.includes('점검표')) {
         sheet.getRange(1, c).setValue('9.점검표');
